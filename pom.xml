@@ -35,7 +35,7 @@
 
 		<repository>
 			<id>CodeMC</id>
-			<url>https://repo.codemc.org/repository/maven-public</url>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
 		</repository>
 	</repositories>
 

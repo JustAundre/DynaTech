@@ -160,6 +160,26 @@ public class GrowthChamber extends AbstractElectricMachine {
 			new ItemStack(Material.VINE),
 			new ItemStack(Material.VINE, 3)
 		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.PALE_HANGING_MOSS),
+			new ItemStack(Material.PALE_HANGING_MOSS, 3)
+		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.GLOW_LICHEN),
+			new ItemStack(Material.GLOW_LICHEN, 3)
+		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.BIG_DRIPLEAF),
+			new ItemStack(Material.BIG_DRIPLEAF, 3)
+		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.SMALL_DRIPLEAF),
+			new ItemStack(Material.SMALL_DRIPLEAF, 3)
+		);
 
 		// Flowers
 		registerRecipe(
@@ -247,6 +267,19 @@ public class GrowthChamber extends AbstractElectricMachine {
 			new ItemStack(Material.PEONY),
 			new ItemStack(Material.PEONY, 2)
 		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.TORCHFLOWER_SEEDS),
+			new ItemStack[] {
+				new ItemStack(Material.TORCHFLOWER, 1),
+				new ItemStack(Material.TORCHFLOWER_SEEDS, 1)
+			}
+		);
+		registerRecipe(
+			12,
+			new ItemStack(Material.PINK_PETALS),
+			new ItemStack(Material.PINK_PETALS, 3)
+		);
 		
 		// Trees
 		registerRecipe(
@@ -311,6 +344,30 @@ public class GrowthChamber extends AbstractElectricMachine {
 			new ItemStack[] {
 				new ItemStack(Material.CHERRY_SAPLING, 3),
 				new ItemStack(Material.CHERRY_LOG, 6)
+			}
+		);
+		registerRecipe(
+			30,
+			new ItemStack(Material.FLOWERING_AZALEA),
+			new ItemStack[] {
+				new ItemStack(Material.FLOWERING_AZALEA, 3),
+				new ItemStack(Material.OAK_LOG, 6)
+			}
+		);
+		registerRecipe(
+			30,
+			new ItemStack(Material.CHERRY_SAPLING),
+			new ItemStack[] {
+				new ItemStack(Material.CHERRY_SAPLING, 3),
+				new ItemStack(Material.CHERRY_LOG, 6)
+			}
+		);
+		registerRecipe(
+			30, 
+			new ItemStack(Material.PALE_OAK_SAPLING),
+			new ItemStack[] {
+				new ItemStack(Material.PALE_OAK_SAPLING, 3),
+				new ItemStack(Material.PALE_OAK_LOG, 6)
 			}
 		);
 	}

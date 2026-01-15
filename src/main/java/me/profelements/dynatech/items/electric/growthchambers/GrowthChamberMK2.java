@@ -35,7 +35,6 @@ public class GrowthChamberMK2 extends AbstractElectricMachine {
 
 	public GrowthChamberMK2(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
 		super(itemGroup, item, recipeType, recipe);
-
 		addItemSetting(exoticGardenIntegration);
 	}
 	
@@ -164,6 +163,26 @@ public class GrowthChamberMK2 extends AbstractElectricMachine {
 			new ItemStack(Material.VINE),
 			new ItemStack(Material.VINE, 9)
 		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.PALE_HANGING_MOSS),
+			new ItemStack(Material.PALE_HANGING_MOSS, 9)
+		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.GLOW_LICHEN),
+			new ItemStack(Material.GLOW_LICHEN, 9)
+		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.BIG_DRIPLEAF),
+			new ItemStack(Material.BIG_DRIPLEAF, 9)
+		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.SMALL_DRIPLEAF),
+			new ItemStack(Material.SMALL_DRIPLEAF, 9)
+		);
 		
 		// Flowers
 		registerRecipe(
@@ -251,6 +270,17 @@ public class GrowthChamberMK2 extends AbstractElectricMachine {
 			new ItemStack(Material.PEONY),
 			new ItemStack(Material.PEONY, 6)
 		);
+		registerRecipe(
+			12,
+			new ItemStack(Material.PINK_PETALS),
+			new ItemStack(Material.PINK_PETALS, 9)
+		);
+		registerRecipe(
+			9,
+			new ItemStack(Material.TORCHFLOWER_SEEDS),
+			new ItemStack(Material.TORCHFLOWER, 3),
+			new ItemStack(Material.TORCHFLOWER_SEEDS, 3)
+		);
 		
 		// Trees
 		registerRecipe(
@@ -335,6 +365,38 @@ public class GrowthChamberMK2 extends AbstractElectricMachine {
 				new ItemStack(Material.CHERRY_SAPLING, 9),
 				new ItemStack(Material.CHERRY_LOG, 18),
 				new ItemStack(Material.CHERRY_LEAVES, 9)
+			}
+		);
+		registerRecipe(
+			30,
+			new ItemStack(Material.FLOWERING_AZALEA),
+			new ItemStack[] {
+				new ItemStack(Material.FLOWERING_AZALEA, 9),
+				new ItemStack(Material.OAK_LOG, 18),
+				new ItemStack(Material.APPLE, 6),
+				new ItemStack(Material.AZALEA_LEAVES, 9),
+				new ItemStack(Material.FLOWERING_AZALEA_LEAVES, 9),
+				new ItemStack(Material.STICK, 6),
+				new ItemStack(Material.HANGING_ROOTS, 1)
+			}
+		);
+		registerRecipe(
+			30,
+			new ItemStack(Material.CHERRY_SAPLING),
+			new ItemStack[] {
+				new ItemStack(Material.CHERRY_SAPLING, 9),
+				new ItemStack(Material.CHERRY_LOG, 18),
+				new ItemStack(Material.CHERRY_LEAVES, 9)
+			}
+		);
+		registerRecipe(
+			30,
+			new ItemStack(Material.PALE_OAK_SAPLING),
+			new ItemStack[] {
+				new ItemStack(Material.PALE_OAK_SAPLING, 9),
+				new ItemStack(Material.PALE_OAK_LOG, 18),
+				new ItemStack(Material.APPLE, 6),
+				new ItemStack(Material.PALE_OAK_LEAVES, 9)
 			}
 		);
 	}
