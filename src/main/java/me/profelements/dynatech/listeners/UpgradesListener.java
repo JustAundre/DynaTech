@@ -28,161 +28,161 @@ import me.profelements.dynatech.registries.Items;
 
 public class UpgradesListener implements Listener {
 
-    public UpgradesListener(DynaTech plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
+	public UpgradesListener(DynaTech plugin) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
 
-    @EventHandler
-    public void onMachineFinish(AsyncMachineOperationFinishEvent e) {
-        if (!(e.getOperation() instanceof CraftingOperation)) {
-            return;
-        }
+	@EventHandler
+	public void onMachineFinish(AsyncMachineOperationFinishEvent e) {
+		if (!(e.getOperation() instanceof CraftingOperation)) {
+			return;
+		}
 
-        checkInputUpgrade(e);
+		checkInputUpgrade(e);
 
-        Location l = e.getPosition().toLocation();
-        String upgrades = BlockStorage.getLocationInfo(l, "upgrades");
+		Location l = e.getPosition().toLocation();
+		String upgrades = BlockStorage.getLocationInfo(l, "upgrades");
 
-        if (upgrades == null) {
-            return;
-        }
+		if (upgrades == null) {
+			return;
+		}
 
-        int upgradeIdx = upgrades.indexOf("{id:auto_output");
-        if (upgradeIdx == -1) {
-            return;
-        }
+		int upgradeIdx = upgrades.indexOf("{id:auto_output");
+		if (upgradeIdx == -1) {
+			return;
+		}
 
-        int upgradeIdx2 = upgrades.indexOf("}", upgradeIdx);
+		int upgradeIdx2 = upgrades.indexOf("}", upgradeIdx);
 
-        String upgradeString = upgrades.substring(upgradeIdx, upgradeIdx2 + 1);
+		String upgradeString = upgrades.substring(upgradeIdx, upgradeIdx2 + 1);
 
-        if (upgrades != null && upgrades.contains("id:auto_output")) {
-            int index = upgradeString.indexOf("face:");
-            int index2 = upgradeString.indexOf("}");
-            BlockFace face = AutoOutputUpgrade.stringToBlockFace(upgradeString.substring(index, index2));
-            // DynaTech.getInstance().getLogger().info(face.toString());
-            // Grab menu and then grab output slots
-            if (e.getProcessor().getOwner() instanceof AContainer cont
-                    && e.getOperation() instanceof CraftingOperation op && op.isFinished()) {
-                BlockMenu menu = BlockStorage.getInventory(l);
-                int[] outputSlots = cont.getOutputSlots();
-                ItemStack[] outputItems = op.getResults();
-                List<Boolean> outed = new ArrayList<>(outputItems.length);
-                // Clear `outputItems` from `outputSlots`
-                if (l.getBlock().getRelative(face).getType().equals(Material.CHEST)) {
-                    for (int i = 0; i < outputSlots.length; i++) {
-                        ItemStack item = menu.getItemInSlot(outputSlots[i]);
-                        for (ItemStack outputItem : outputItems) {
-                            if (SlimefunUtils.isItemSimilar(item, outputItem, true) && outed.size() < (i + 1)) {
-                                int amount = item.getAmount();
-                                int outAmount = outputItem.getAmount();
-                                if (amount >= outAmount) {
-                                    menu.consumeItem(outputSlots[i], outAmount);
-                                    outed.add(true);
-                                }
-                            }
-                        }
-                    }
+		if (upgrades != null && upgrades.contains("id:auto_output")) {
+			int index = upgradeString.indexOf("face:");
+			int index2 = upgradeString.indexOf("}");
+			BlockFace face = AutoOutputUpgrade.stringToBlockFace(upgradeString.substring(index, index2));
+			// DynaTech.getInstance().getLogger().info(face.toString());
+			// Grab menu and then grab output slots
+			if (e.getProcessor().getOwner() instanceof AContainer cont
+					&& e.getOperation() instanceof CraftingOperation op && op.isFinished()) {
+				BlockMenu menu = BlockStorage.getInventory(l);
+				int[] outputSlots = cont.getOutputSlots();
+				ItemStack[] outputItems = op.getResults();
+				List<Boolean> outed = new ArrayList<>(outputItems.length);
+				// Clear `outputItems` from `outputSlots`
+				if (l.getBlock().getRelative(face).getType().equals(Material.CHEST)) {
+					for (int i = 0; i < outputSlots.length; i++) {
+						ItemStack item = menu.getItemInSlot(outputSlots[i]);
+						for (ItemStack outputItem : outputItems) {
+							if (SlimefunUtils.isItemSimilar(item, outputItem, true) && outed.size() < (i + 1)) {
+								int amount = item.getAmount();
+								int outAmount = outputItem.getAmount();
+								if (amount >= outAmount) {
+									menu.consumeItem(outputSlots[i], outAmount);
+									outed.add(true);
+								}
+							}
+						}
+					}
 
-                    DynaTech.runSync(() -> {
-                        BlockState state = PaperLib.getBlockState(l.getBlock().getRelative(face), false).getState();
-                        if (state instanceof Chest chest
-                                && InvUtils.fitAll(chest.getBlockInventory(), outputItems)) {
-                            Inventory inv = chest.getBlockInventory();
+					DynaTech.runSync(() -> {
+						BlockState state = PaperLib.getBlockState(l.getBlock().getRelative(face), false).getState();
+						if (state instanceof Chest chest
+								&& InvUtils.fitAll(chest.getBlockInventory(), outputItems)) {
+							Inventory inv = chest.getBlockInventory();
 
-                            inv.addItem(outputItems);
-                            chest.update(true, false);
-                        }
-                    });
-                }
-            }
-        }
-    }
+							inv.addItem(outputItems);
+							chest.update(true, false);
+						}
+					});
+				}
+			}
+		}
+	}
 
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent e) {
-        Location l = e.getBlock().getLocation();
-        String upgrades = BlockStorage.getLocationInfo(l, "upgrades");
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent e) {
+		Location l = e.getBlock().getLocation();
+		String upgrades = BlockStorage.getLocationInfo(l, "upgrades");
 
-        if (upgrades != null && upgrades.contains("auto_output")) {
-            l.getWorld().dropItemNaturally(l, Items.AUTO_OUTPUT_UPGRADE.stack().item());
-        }
+		if (upgrades != null && upgrades.contains("auto_output")) {
+			l.getWorld().dropItemNaturally(l, Items.AUTO_OUTPUT_UPGRADE.stack().item());
+		}
 
-        if (upgrades != null && upgrades.contains("auto_input")) {
-            l.getWorld().dropItemNaturally(l, Items.AUTO_INPUT_UPGRADE.stack().item());
-        }
-    }
+		if (upgrades != null && upgrades.contains("auto_input")) {
+			l.getWorld().dropItemNaturally(l, Items.AUTO_INPUT_UPGRADE.stack().item());
+		}
+	}
 
-    private static void checkInputUpgrade(AsyncMachineOperationFinishEvent e) {
-        Location l = e.getPosition().toLocation();
-        String upgrades = BlockStorage.getLocationInfo(l, "upgrades");
+	private static void checkInputUpgrade(AsyncMachineOperationFinishEvent e) {
+		Location l = e.getPosition().toLocation();
+		String upgrades = BlockStorage.getLocationInfo(l, "upgrades");
 
-        if (upgrades == null) {
-            return;
-        }
+		if (upgrades == null) {
+			return;
+		}
 
-        int upgradeIdx = upgrades.indexOf("{id:auto_input");
-        if (upgradeIdx == -1) {
-            return;
-        }
+		int upgradeIdx = upgrades.indexOf("{id:auto_input");
+		if (upgradeIdx == -1) {
+			return;
+		}
 
-        int upgradeIdx2 = upgrades.indexOf("}", upgradeIdx);
+		int upgradeIdx2 = upgrades.indexOf("}", upgradeIdx);
 
-        String upgradeString = upgrades.substring(upgradeIdx, upgradeIdx2 + 1);
+		String upgradeString = upgrades.substring(upgradeIdx, upgradeIdx2 + 1);
 
-        if (upgradeString.contains("id:auto_input")) {
-            DynaTech.getInstance().getLogger().info("GOT TO INPUT FOUND");
-            // Grab face
-            int index = upgradeString.indexOf("face:");
-            int index2 = upgradeString.indexOf("}");
-            BlockFace face = AutoOutputUpgrade.stringToBlockFace(upgradeString.substring(index, index2));
-            if (face == BlockFace.SELF) {
-                return;
-            }
+		if (upgradeString.contains("id:auto_input")) {
+			DynaTech.getInstance().getLogger().info("GOT TO INPUT FOUND");
+			// Grab face
+			int index = upgradeString.indexOf("face:");
+			int index2 = upgradeString.indexOf("}");
+			BlockFace face = AutoOutputUpgrade.stringToBlockFace(upgradeString.substring(index, index2));
+			if (face == BlockFace.SELF) {
+				return;
+			}
 
-            DynaTech.runSync(() -> {
-                BlockState state = PaperLib.getBlockState(l.getBlock().getRelative(face), false).getState();
-                if (state instanceof Chest chest && e.getProcessor().getOwner() instanceof AContainer acont) {
-                    BlockMenu inv = BlockStorage.getInventory(l);
-                    int[] slots = acont.getInputSlots();
-                    for (int slot : slots) {
-                        Inventory chsInv = chest.getBlockInventory();
-                        ItemStack inputStack = inv.getItemInSlot(slot);
-                        for (ItemStack stack : chsInv.getContents()) {
-                            if (inputStack == null && stack != null
-                                    || inputStack != null && stack != null && stack.isSimilar(inputStack)) {
-                                int chsAmount = stack.getAmount();
+			DynaTech.runSync(() -> {
+				BlockState state = PaperLib.getBlockState(l.getBlock().getRelative(face), false).getState();
+				if (state instanceof Chest chest && e.getProcessor().getOwner() instanceof AContainer acont) {
+					BlockMenu inv = BlockStorage.getInventory(l);
+					int[] slots = acont.getInputSlots();
+					for (int slot : slots) {
+						Inventory chsInv = chest.getBlockInventory();
+						ItemStack inputStack = inv.getItemInSlot(slot);
+						for (ItemStack stack : chsInv.getContents()) {
+							if (inputStack == null && stack != null
+									|| inputStack != null && stack != null && stack.isSimilar(inputStack)) {
+								int chsAmount = stack.getAmount();
 
-                                if (inputStack == null) {
+								if (inputStack == null) {
 
-                                    DynaTech.getInstance().getLogger().info("GOT TO NULLY FOUND");
-                                    inv.pushItem(stack, acont.getInputSlots());
-                                    chsInv.remove(stack);
-                                } else {
-                                    if (inputStack.getAmount() == inputStack.getMaxStackSize()) {
-                                        return;
-                                    } else {
-                                        int diff = inputStack.getMaxStackSize() - inputStack.getAmount();
-                                        if (diff >= chsAmount) {
+									DynaTech.getInstance().getLogger().info("GOT TO NULLY FOUND");
+									inv.pushItem(stack, acont.getInputSlots());
+									chsInv.remove(stack);
+								} else {
+									if (inputStack.getAmount() == inputStack.getMaxStackSize()) {
+										return;
+									} else {
+										int diff = inputStack.getMaxStackSize() - inputStack.getAmount();
+										if (diff >= chsAmount) {
 
-                                            DynaTech.getInstance().getLogger().info("GOT TO DIFFY FOUND");
-                                            inputStack.setAmount(inputStack.getAmount() + chsAmount);
-                                            chsInv.remove(stack);
-                                        } else {
+											DynaTech.getInstance().getLogger().info("GOT TO DIFFY FOUND");
+											inputStack.setAmount(inputStack.getAmount() + chsAmount);
+											chsInv.remove(stack);
+										} else {
 
-                                            DynaTech.getInstance().getLogger().info("GOT TO DIFFY2 FOUND");
-                                            inputStack.setAmount(inputStack.getAmount() + diff);
-                                            stack.setAmount(chsAmount - diff);
-                                        }
-                                    }
-                                }
+											DynaTech.getInstance().getLogger().info("GOT TO DIFFY2 FOUND");
+											inputStack.setAmount(inputStack.getAmount() + diff);
+											stack.setAmount(chsAmount - diff);
+										}
+									}
+								}
 
-                            }
-                        }
-                    }
-                }
+							}
+						}
+					}
+				}
 
-            });
-        }
-    }
+			});
+		}
+	}
 }

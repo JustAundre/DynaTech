@@ -14,67 +14,67 @@ import com.google.common.base.Preconditions;
 
 public class PicnicBasketFeedPlayerEvent extends PlayerEvent implements Cancellable {
 
-    public static final HandlerList handlers = new HandlerList();
+	public static final HandlerList handlers = new HandlerList();
 
-    private final PicnicBasket picnicBasket;
-    private final ItemStack picnicBasketItem;
+	private final PicnicBasket picnicBasket;
+	private final ItemStack picnicBasketItem;
 
-    private ItemStack itemConsumed;
-    private boolean cancelled;
+	private ItemStack itemConsumed;
+	private boolean cancelled;
 
-    @ParametersAreNonnullByDefault
-    public PicnicBasketFeedPlayerEvent(Player player, PicnicBasket picnicBasket, ItemStack picnicBasketItem, ItemStack itemConsumed) {
-        super(player);
+	@ParametersAreNonnullByDefault
+	public PicnicBasketFeedPlayerEvent(Player player, PicnicBasket picnicBasket, ItemStack picnicBasketItem, ItemStack itemConsumed) {
+		super(player);
 
-        this.picnicBasket = picnicBasket;
-        this.picnicBasketItem = picnicBasketItem;
-        this.itemConsumed =itemConsumed;
+		this.picnicBasket = picnicBasket;
+		this.picnicBasketItem = picnicBasketItem;
+		this.itemConsumed =itemConsumed;
 
 
-    }
+	}
 
-    @Nonnull
-    public PicnicBasket getPicnicBasket() {
-        return picnicBasket;
-    }
+	@Nonnull
+	public PicnicBasket getPicnicBasket() {
+		return picnicBasket;
+	}
 
-    @Nonnull
-    public ItemStack getPicnicBasketItem() {
-        return picnicBasketItem;
-    }
+	@Nonnull
+	public ItemStack getPicnicBasketItem() {
+		return picnicBasketItem;
+	}
 
-    @Nonnull
-    public ItemStack getItemConsumed() {
-        return itemConsumed.clone();
-    }
+	@Nonnull
+	public ItemStack getItemConsumed() {
+		return itemConsumed.clone();
+	}
 
-    public void setConsumedItem(@Nonnull ItemStack item) {
-      Preconditions.checkNotNull(item, "Consumed item can not be null");
-      Preconditions.checkArgument(item.getType().isEdible(), "Item must be edible");
-      
-      this.itemConsumed = item;
-    }
+	public void setConsumedItem(@Nonnull ItemStack item) {
+	  Preconditions.checkNotNull(item, "Consumed item can not be null");
+	  Preconditions.checkArgument(item.getType().isEdible(), "Item must be edible");
+	  
+	  this.itemConsumed = item;
+	}
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
+	}
 
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
-    }
+	@Override
+	public void setCancelled(boolean cancel) {
+		this.cancelled = cancel;
+	}
 
-    @Nonnull
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	@Nonnull
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
-    @Nonnull
-    @Override
-    public HandlerList getHandlers() {
-        return getHandlerList();
-    }
+	@Nonnull
+	@Override
+	public HandlerList getHandlers() {
+		return getHandlerList();
+	}
 
 
 }

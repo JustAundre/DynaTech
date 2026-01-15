@@ -12,33 +12,33 @@ import me.profelements.dynatech.registries.Registry;
 import me.profelements.dynatech.registries.TypedKey;
 
 public class RegistryFreezeEvent<T> extends Event {
-    private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 
-    private final TypedKey<Registry<T>> registryKey;
+	private final TypedKey<Registry<T>> registryKey;
 
-    @ParametersAreNonnullByDefault
-    private RegistryFreezeEvent(TypedKey<Registry<T>> registryKey) {
-        this.registryKey = registryKey;
-    }
+	@ParametersAreNonnullByDefault
+	private RegistryFreezeEvent(TypedKey<Registry<T>> registryKey) {
+		this.registryKey = registryKey;
+	}
 
-    public static <T> RegistryFreezeEvent<T> create(TypedKey<Registry<T>> registryKey) {
-        Preconditions.checkNotNull(registryKey);
+	public static <T> RegistryFreezeEvent<T> create(TypedKey<Registry<T>> registryKey) {
+		Preconditions.checkNotNull(registryKey);
 
-        return new RegistryFreezeEvent<>(registryKey);
-    }
+		return new RegistryFreezeEvent<>(registryKey);
+	}
 
-    public TypedKey<Registry<T>> getRegistryKey() {
-        return registryKey;
-    }
+	public TypedKey<Registry<T>> getRegistryKey() {
+		return registryKey;
+	}
 
-    @Nonnull
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	@Nonnull
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
-    @Override
-    public HandlerList getHandlers() {
-        return getHandlerList();
-    }
+	@Override
+	public HandlerList getHandlers() {
+		return getHandlerList();
+	}
 
 }

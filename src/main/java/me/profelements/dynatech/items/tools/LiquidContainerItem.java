@@ -13,36 +13,36 @@ import me.profelements.dynatech.utils.Liquid;
 
 public class LiquidContainerItem extends SlimefunItem implements LiquidContainer {
 
-    private final Liquid liquid;
-    private final int liquidCapacity;
+	private final Liquid liquid;
+	private final int liquidCapacity;
 
-    public LiquidContainerItem(ItemGroup group, SlimefunItemStack stack, RecipeType recipeType, ItemStack[] input,
-            Liquid liquid, int liquidCapacity) {
-        super(group, stack, recipeType, input);
+	public LiquidContainerItem(ItemGroup group, SlimefunItemStack stack, RecipeType recipeType, ItemStack[] input,
+			Liquid liquid, int liquidCapacity) {
+		super(group, stack, recipeType, input);
 
-        this.liquid = liquid;
-        this.liquidCapacity = liquidCapacity;
+		this.liquid = liquid;
+		this.liquidCapacity = liquidCapacity;
 
-        addItemHandler(onItemUse());
-    }
+		addItemHandler(onItemUse());
+	}
 
-    private ItemUseHandler onItemUse() {
-        return new ItemUseHandler() {
-            @Override
-            public void onRightClick(PlayerRightClickEvent event) {
-                event.cancel();
-            }
+	private ItemUseHandler onItemUse() {
+		return new ItemUseHandler() {
+			@Override
+			public void onRightClick(PlayerRightClickEvent event) {
+				event.cancel();
+			}
 
-        };
-    }
+		};
+	}
 
-    @Override
-    public Liquid getLiquid() {
-        return this.liquid;
-    }
+	@Override
+	public Liquid getLiquid() {
+		return this.liquid;
+	}
 
-    @Override
-    public int getLiquidCapacity() {
-        return this.liquidCapacity;
-    }
+	@Override
+	public int getLiquidCapacity() {
+		return this.liquidCapacity;
+	}
 }

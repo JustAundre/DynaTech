@@ -19,42 +19,42 @@ import org.bukkit.inventory.ItemStack;
 
 public class Scoop extends SlimefunItem implements Rechargeable, NotPlaceable {
 
-    public Scoop(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
+	public Scoop(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
 
-        addItemHandler(getItemHandler());
-    }
+		addItemHandler(getItemHandler());
+	}
 
-    public EntityInteractHandler getItemHandler() {
-        return (e, item, offhand) -> {
-            if (getItemCharge(item) < 8) {
-                return;
-            }
+	public EntityInteractHandler getItemHandler() {
+		return (e, item, offhand) -> {
+			if (getItemCharge(item) < 8) {
+				return;
+			}
 
-            Entity entity = e.getRightClicked();
+			Entity entity = e.getRightClicked();
 
-            if (e.isCancelled() || !Slimefun.getProtectionManager().hasPermission(e.getPlayer(), entity.getLocation(),
-                    Interaction.INTERACT_ENTITY)) {
-                return;
-            }
+			if (e.isCancelled() || !Slimefun.getProtectionManager().hasPermission(e.getPlayer(), entity.getLocation(),
+					Interaction.INTERACT_ENTITY)) {
+				return;
+			}
 
-            Player p = e.getPlayer();
+			Player p = e.getPlayer();
 
-            if (entity instanceof Bee) {
+			if (entity instanceof Bee) {
 
-                entity.getWorld().dropItemNaturally(entity.getLocation(), Items.BEE.stack().item());
-                entity.remove();
-                removeItemCharge(item, 8);
+				entity.getWorld().dropItemNaturally(entity.getLocation(), Items.BEE.stack().item());
+				entity.remove();
+				removeItemCharge(item, 8);
 
-                p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
-            }
-        };
+				p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_FALL, 1, 1);
+			}
+		};
 
-    }
+	}
 
-    @Override
-    public float getMaxItemCharge(ItemStack item) {
-        return 512;
-    }
+	@Override
+	public float getMaxItemCharge(ItemStack item) {
+		return 512;
+	}
 
 }

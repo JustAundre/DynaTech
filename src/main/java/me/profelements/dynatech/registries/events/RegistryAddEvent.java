@@ -14,70 +14,70 @@ import me.profelements.dynatech.registries.TypedKey;
 
 public class RegistryAddEvent<T> extends Event implements Cancellable {
 
-    private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 
-    private final TypedKey<Registry<T>> registryKey;
-    private TypedKey<T> entryKey;
-    private T entry;
-    private boolean cancelled;
+	private final TypedKey<Registry<T>> registryKey;
+	private TypedKey<T> entryKey;
+	private T entry;
+	private boolean cancelled;
 
-    @ParametersAreNonnullByDefault
-    private RegistryAddEvent(TypedKey<Registry<T>> registryKey, TypedKey<T> entryKey, T entry) {
-        this.registryKey = registryKey;
-        this.entryKey = entryKey;
-        this.entry = entry;
-    }
+	@ParametersAreNonnullByDefault
+	private RegistryAddEvent(TypedKey<Registry<T>> registryKey, TypedKey<T> entryKey, T entry) {
+		this.registryKey = registryKey;
+		this.entryKey = entryKey;
+		this.entry = entry;
+	}
 
-    public static <T> RegistryAddEvent<T> create(TypedKey<Registry<T>> registryKey, TypedKey<T> entryKey, T entry) {
-        Preconditions.checkNotNull(registryKey);
-        Preconditions.checkNotNull(entryKey);
-        Preconditions.checkNotNull(entry);
+	public static <T> RegistryAddEvent<T> create(TypedKey<Registry<T>> registryKey, TypedKey<T> entryKey, T entry) {
+		Preconditions.checkNotNull(registryKey);
+		Preconditions.checkNotNull(entryKey);
+		Preconditions.checkNotNull(entry);
 
-        return new RegistryAddEvent<>(registryKey, entryKey, entry);
-    }
+		return new RegistryAddEvent<>(registryKey, entryKey, entry);
+	}
 
-    @Nonnull
-    public TypedKey<Registry<T>> getRegistyKey() {
-        return registryKey;
-    }
+	@Nonnull
+	public TypedKey<Registry<T>> getRegistyKey() {
+		return registryKey;
+	}
 
-    @Nonnull
-    public TypedKey<T> getEntryKey() {
-        return entryKey;
-    }
+	@Nonnull
+	public TypedKey<T> getEntryKey() {
+		return entryKey;
+	}
 
-    public void setEntryKey(TypedKey<T> entry) {
-        Preconditions.checkNotNull(entry);
-        entryKey = entry;
-    }
+	public void setEntryKey(TypedKey<T> entry) {
+		Preconditions.checkNotNull(entry);
+		entryKey = entry;
+	}
 
-    @Nonnull
-    public T getEntry() {
-        return entry;
-    }
+	@Nonnull
+	public T getEntry() {
+		return entry;
+	}
 
-    public void setEntry(T entryKey) {
-        Preconditions.checkNotNull(entryKey);
-        entry = entryKey;
-    }
+	public void setEntry(T entryKey) {
+		Preconditions.checkNotNull(entryKey);
+		entry = entryKey;
+	}
 
-    @Override
-    public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
+	@Override
+	public void setCancelled(boolean cancel) {
+		cancelled = cancel;
+	}
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
+	}
 
-    @Nonnull
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	@Nonnull
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
-    @Override
-    public HandlerList getHandlers() {
-        return getHandlerList();
-    }
+	@Override
+	public HandlerList getHandlers() {
+		return getHandlerList();
+	}
 }

@@ -31,93 +31,93 @@ import java.util.UUID;
 
 public class AntigravityBubble extends AbstractElectricTicker implements Listener {
 
-    private final Map<Location, Set<UUID>> enabledPlayers = new HashMap<>(); 
-    private final Set<UUID> teleportedPlayers = new HashSet<>();
+	private final Map<Location, Set<UUID>> enabledPlayers = new HashMap<>(); 
+	private final Set<UUID> teleportedPlayers = new HashSet<>();
 
 	public AntigravityBubble(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
 		super(itemGroup, item, recipeType, recipe);
-        Bukkit.getPluginManager().registerEvents(this, DynaTech.getInstance());
+		Bukkit.getPluginManager().registerEvents(this, DynaTech.getInstance());
 	}
 
-    @Override
-    protected void onPlace(BlockPlaceEvent e, Block blockPlaced) {
-        enabledPlayers.put(blockPlaced.getLocation(), new HashSet<>()); 
-    }
+	@Override
+	protected void onPlace(BlockPlaceEvent e, Block blockPlaced) {
+		enabledPlayers.put(blockPlaced.getLocation(), new HashSet<>()); 
+	}
 
-    @Override
-    protected void onBreak(BlockBreakEvent e, Location l) {
-        for (UUID plyr : enabledPlayers.get(l)) {
-            Player player = Bukkit.getPlayer(plyr);
+	@Override
+	protected void onBreak(BlockBreakEvent e, Location l) {
+		for (UUID plyr : enabledPlayers.get(l)) {
+			Player player = Bukkit.getPlayer(plyr);
 
-            player.setAllowFlight(false);
-            player.setFlying(false);
-            player.setFallDistance(0.f);
-        }
+			player.setAllowFlight(false);
+			player.setFlying(false);
+			player.setFallDistance(0.f);
+		}
 
-        enabledPlayers.remove(l);
-        
-    }
+		enabledPlayers.remove(l);
+		
+	}
 
-    @EventHandler
-    public void onPlayerTeleport(PlayerTeleportEvent e) {
-        if (e.getPlayer() != null) {
-            teleportedPlayers.add(e.getPlayer().getUniqueId()); 
-        }
-    }
+	@EventHandler
+	public void onPlayerTeleport(PlayerTeleportEvent e) {
+		if (e.getPlayer() != null) {
+			teleportedPlayers.add(e.getPlayer().getUniqueId()); 
+		}
+	}
 
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent e) {
-        for (Map.Entry<Location, Set<UUID>> entry : enabledPlayers.entrySet()) {
-            if (entry.getKey().getChunk() == e.getChunk()) {
-                Set<UUID> players = enabledPlayers.getOrDefault(entry.getKey(), new HashSet<>());
-                for (Iterator<UUID> iterator = players.iterator(); iterator.hasNext();) {
-                    Player p = Bukkit.getPlayer(iterator.next()); 
+	@EventHandler
+	public void onChunkUnload(ChunkUnloadEvent e) {
+		for (Map.Entry<Location, Set<UUID>> entry : enabledPlayers.entrySet()) {
+			if (entry.getKey().getChunk() == e.getChunk()) {
+				Set<UUID> players = enabledPlayers.getOrDefault(entry.getKey(), new HashSet<>());
+				for (Iterator<UUID> iterator = players.iterator(); iterator.hasNext();) {
+					Player p = Bukkit.getPlayer(iterator.next()); 
 
-                     if (p != null) {
-                        p.setAllowFlight(false);
-                        p.setFlying(false);
-                        p.setFallDistance(0.f);
+					 if (p != null) {
+						p.setAllowFlight(false);
+						p.setFlying(false);
+						p.setFallDistance(0.f);
 
-                        iterator.remove();
-                    }      
-                }
-                break;
-            }
-        }
-        enabledPlayers.entrySet().removeIf(entry -> entry.getKey().getChunk().equals(e.getChunk()));
-    }
+						iterator.remove();
+					}	  
+				}
+				break;
+			}
+		}
+		enabledPlayers.entrySet().removeIf(entry -> entry.getKey().getChunk().equals(e.getChunk()));
+	}
 
 	@Override
 	protected void tick(Block b, SlimefunItem item) {
-        Collection<Entity> bubbledEntities = b.getWorld().getNearbyEntities(b.getLocation(), 16, 16, 16, Player.class::isInstance);
-        for (Entity entity : bubbledEntities) {
-            Player p = (Player) entity; 
+		Collection<Entity> bubbledEntities = b.getWorld().getNearbyEntities(b.getLocation(), 16, 16, 16, Player.class::isInstance);
+		for (Entity entity : bubbledEntities) {
+			Player p = (Player) entity; 
 
-            if (!p.getAllowFlight() && (p.getGameMode() != GameMode.CREATIVE || p.getGameMode() != GameMode.SPECTATOR)) {
-                enabledPlayers.getOrDefault(b.getLocation(), new HashSet<>()).add(p.getUniqueId()); 
-                p.setAllowFlight(true); 
-            }
-        }
+			if (!p.getAllowFlight() && (p.getGameMode() != GameMode.CREATIVE || p.getGameMode() != GameMode.SPECTATOR)) {
+				enabledPlayers.getOrDefault(b.getLocation(), new HashSet<>()).add(p.getUniqueId()); 
+				p.setAllowFlight(true); 
+			}
+		}
 
-        Set<UUID> players = enabledPlayers.getOrDefault(b.getLocation(), new HashSet<>());
-        for (Iterator<UUID> iterator = players.iterator(); iterator.hasNext(); ) {
-            UUID id = iterator.next();
-            Player p = Bukkit.getPlayer(id); 
+		Set<UUID> players = enabledPlayers.getOrDefault(b.getLocation(), new HashSet<>());
+		for (Iterator<UUID> iterator = players.iterator(); iterator.hasNext(); ) {
+			UUID id = iterator.next();
+			Player p = Bukkit.getPlayer(id); 
 
-            if (p != null && !bubbledEntities.contains(p) || (p != null && teleportedPlayers.contains(id))) {
-                p.setAllowFlight(false);
-                p.setFlying(false);
-                p.setFallDistance(0.f);
+			if (p != null && !bubbledEntities.contains(p) || (p != null && teleportedPlayers.contains(id))) {
+				p.setAllowFlight(false);
+				p.setFlying(false);
+				p.setFallDistance(0.f);
 
-                iterator.remove();
-            }
-        }
+				iterator.remove();
+			}
+		}
 
-        teleportedPlayers.clear();
+		teleportedPlayers.clear();
 	}
 
-    @Override
-    protected boolean isSynchronized() {
-        return true;
-    }
+	@Override
+	protected boolean isSynchronized() {
+		return true;
+	}
 }

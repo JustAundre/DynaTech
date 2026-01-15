@@ -14,26 +14,26 @@ import org.bukkit.inventory.ItemStack;
 
 public class HydroGenerator extends SlimefunItem {
 
-    private final int energy;
+	private final int energy;
 
-    public HydroGenerator(ItemGroup itemGroup, int energy, SlimefunItemStack item, RecipeType recipeType,
-            ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
+	public HydroGenerator(ItemGroup itemGroup, int energy, SlimefunItemStack item, RecipeType recipeType,
+			ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
 
-        this.energy = energy;
+		this.energy = energy;
 
-        addItemHandler(onBlockBreak());
-    }
+		addItemHandler(onBlockBreak());
+	}
 
-    private BlockBreakHandler onBlockBreak() {
-        return new BlockBreakHandler(false, false) {
-            @Override
-            public void onPlayerBreak(BlockBreakEvent event, ItemStack arg1, List<ItemStack> arg2) {
-                arg2.clear();
-                event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
-                        Items.DEGRADED_WATER_MILL.stack().item());
-            }
-        };
-    }
+	private BlockBreakHandler onBlockBreak() {
+		return new BlockBreakHandler(false, false) {
+			@Override
+			public void onPlayerBreak(BlockBreakEvent event, ItemStack arg1, List<ItemStack> arg2) {
+				arg2.clear();
+				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(),
+						Items.DEGRADED_WATER_MILL.stack().item());
+			}
+		};
+	}
 
 }

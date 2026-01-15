@@ -11,8 +11,8 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.items.autocrafters.SlimefunAutoCrafter;
 
 public class KitchenAutoCrafter extends SlimefunAutoCrafter {
-    
-    @ParametersAreNonnullByDefault
+	
+	@ParametersAreNonnullByDefault
 	public KitchenAutoCrafter(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
 		super(itemGroup, item, recipeType, recipe, ExoticGardenRecipeTypes.KITCHEN);
 	}

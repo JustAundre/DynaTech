@@ -14,52 +14,52 @@ import me.profelements.dynatech.registries.TypedKey;
 
 public class RegistryRemoveEvent<T> extends Event implements Cancellable {
 
-    private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList handlers = new HandlerList();
 
-    private final TypedKey<Registry<T>> registryKey;
-    private TypedKey<T> entryKey;
-    private boolean cancelled;
+	private final TypedKey<Registry<T>> registryKey;
+	private TypedKey<T> entryKey;
+	private boolean cancelled;
 
-    @ParametersAreNonnullByDefault
-    private RegistryRemoveEvent(TypedKey<Registry<T>> registryKey, TypedKey<T> entryKey) {
-        this.registryKey = registryKey;
-        this.entryKey = entryKey;
-    }
+	@ParametersAreNonnullByDefault
+	private RegistryRemoveEvent(TypedKey<Registry<T>> registryKey, TypedKey<T> entryKey) {
+		this.registryKey = registryKey;
+		this.entryKey = entryKey;
+	}
 
-    public static <T> RegistryRemoveEvent<T> create(TypedKey<Registry<T>> registryKey, TypedKey<T> entryKey) {
-        Preconditions.checkNotNull(registryKey);
-        Preconditions.checkNotNull(entryKey);
+	public static <T> RegistryRemoveEvent<T> create(TypedKey<Registry<T>> registryKey, TypedKey<T> entryKey) {
+		Preconditions.checkNotNull(registryKey);
+		Preconditions.checkNotNull(entryKey);
 
-        return new RegistryRemoveEvent<>(registryKey, entryKey);
-    }
+		return new RegistryRemoveEvent<>(registryKey, entryKey);
+	}
 
-    @Nonnull
-    public TypedKey<Registry<T>> getRegistyKey() {
-        return registryKey;
-    }
+	@Nonnull
+	public TypedKey<Registry<T>> getRegistyKey() {
+		return registryKey;
+	}
 
-    @Nonnull
-    public TypedKey<T> getEntryKey() {
-        return entryKey;
-    }
+	@Nonnull
+	public TypedKey<T> getEntryKey() {
+		return entryKey;
+	}
 
-    @Override
-    public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
+	@Override
+	public void setCancelled(boolean cancel) {
+		cancelled = cancel;
+	}
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
+	@Override
+	public boolean isCancelled() {
+		return cancelled;
+	}
 
-    @Nonnull
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
+	@Nonnull
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
 
-    @Override
-    public HandlerList getHandlers() {
-        return getHandlerList();
-    }
+	@Override
+	public HandlerList getHandlers() {
+		return getHandlerList();
+	}
 }

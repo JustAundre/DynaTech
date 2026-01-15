@@ -38,114 +38,114 @@ import javax.annotation.Nonnull;
 
 public class PotionSprinkler extends AbstractElectricTicker {
 
-    //TODO: Refactor this based arouhnd the same Ideas as AntigravityBubble
+	//TODO: Refactor this based arouhnd the same Ideas as AntigravityBubble
 
-    private final Map<Location, Set<UUID>> enabledEntities = new HashMap<>();
-    private int plyrsApplied = 0;
+	private final Map<Location, Set<UUID>> enabledEntities = new HashMap<>();
+	private int plyrsApplied = 0;
 
-    private static final int[] BACKGROUND_SLOTS = new int[] { 1, 2, 6, 7, 9, 10, 11, 15, 16, 17, 19, 20, 24, 25 };
-    private static final int[] INPUT_BORDER_SLOTS = new int[] { 3, 4, 5, 12, 14, 21, 22, 23 };
-    private static final int[] OUTPUT_BORDER_SLOTS = new int[] { 0, 8, 18, 26 };
+	private static final int[] BACKGROUND_SLOTS = new int[] { 1, 2, 6, 7, 9, 10, 11, 15, 16, 17, 19, 20, 24, 25 };
+	private static final int[] INPUT_BORDER_SLOTS = new int[] { 3, 4, 5, 12, 14, 21, 22, 23 };
+	private static final int[] OUTPUT_BORDER_SLOTS = new int[] { 0, 8, 18, 26 };
 
-    public PotionSprinkler(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
+	public PotionSprinkler(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
 
-        new BlockMenuPreset(getId(), getItemName()) {
-            @Override
-            public void init() {
-                setupMenu(this); 
-            }
+		new BlockMenuPreset(getId(), getItemName()) {
+			@Override
+			public void init() {
+				setupMenu(this); 
+			}
 
 
 			@Override
-            public boolean canOpen(Block b, Player p) {
-                return p.hasPermission("slimefun.inventory.bypass") || Slimefun.getProtectionManager().hasPermission(p, b.getLocation(), Interaction.INTERACT_BLOCK); 
-            }
-            
-            @Nonnull
-            @Override
-            public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
-                if (flow == ItemTransportFlow.INSERT) {
-                    return new int[] {13};
-                } else {
-                    return new int[] {}; 
-                }
-            }
+			public boolean canOpen(Block b, Player p) {
+				return p.hasPermission("slimefun.inventory.bypass") || Slimefun.getProtectionManager().hasPermission(p, b.getLocation(), Interaction.INTERACT_BLOCK); 
+			}
+			
+			@Nonnull
+			@Override
+			public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
+				if (flow == ItemTransportFlow.INSERT) {
+					return new int[] {13};
+				} else {
+					return new int[] {}; 
+				}
+			}
 
-        };
-    }
+		};
+	}
 
-    @Override
-    protected void onPlace(BlockPlaceEvent e, Block blockPlaced) {
-        enabledEntities.put(blockPlaced.getLocation(), new HashSet<>()); 
-    }
+	@Override
+	protected void onPlace(BlockPlaceEvent e, Block blockPlaced) {
+		enabledEntities.put(blockPlaced.getLocation(), new HashSet<>()); 
+	}
 
-    @Override
-    protected void onBreak(BlockBreakEvent e, Location l) {
-        enabledEntities.remove(l);
-        
-    }
+	@Override
+	protected void onBreak(BlockBreakEvent e, Location l) {
+		enabledEntities.remove(l);
+		
+	}
 
 
 
-    private void setupMenu(BlockMenuPreset preset) {
-    	for (int slot : BACKGROUND_SLOTS) {
-            preset.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
-        }
+	private void setupMenu(BlockMenuPreset preset) {
+		for (int slot : BACKGROUND_SLOTS) {
+			preset.addItem(slot, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+		}
 
-        for (int slot : INPUT_BORDER_SLOTS) {
-            preset.addItem(slot, ChestMenuUtils.getInputSlotTexture(), ChestMenuUtils.getEmptyClickHandler());
-        }
+		for (int slot : INPUT_BORDER_SLOTS) {
+			preset.addItem(slot, ChestMenuUtils.getInputSlotTexture(), ChestMenuUtils.getEmptyClickHandler());
+		}
 
-        for (int slot : OUTPUT_BORDER_SLOTS) {
-            preset.addItem(slot, ChestMenuUtils.getOutputSlotTexture(), ChestMenuUtils.getEmptyClickHandler());
-        } 
-    }
+		for (int slot : OUTPUT_BORDER_SLOTS) {
+			preset.addItem(slot, ChestMenuUtils.getOutputSlotTexture(), ChestMenuUtils.getEmptyClickHandler());
+		} 
+	}
 
-    @Override
-    public void tick(Block b, SlimefunItem sfItem) {
-        if (getCharge(b.getLocation()) < getEnergyConsumption()) {
-            return;
-        }
+	@Override
+	public void tick(Block b, SlimefunItem sfItem) {
+		if (getCharge(b.getLocation()) < getEnergyConsumption()) {
+			return;
+		}
 
-        BlockMenu menu = BlockStorage.getInventory(b);
-        ItemStack item = menu.getItemInSlot(13);
+		BlockMenu menu = BlockStorage.getInventory(b);
+		ItemStack item = menu.getItemInSlot(13);
 
-        if (item != null && item.getType() == Material.POTION && item.hasItemMeta() && item.getItemMeta() instanceof PotionMeta potionMeta) {
-            PotionType pt = potionMeta.getBasePotionType();
-            for (Entity ent : b.getWorld().getNearbyEntities(b.getLocation(), 10, 10, 10, LivingEntity.class::isInstance)) {
-                LivingEntity p = (LivingEntity) ent;
-                if (!enabledEntities.get(b.getLocation()).contains(p.getUniqueId())) {
-                    int amplifier = (!pt.isUpgradeable()) ? 1 : 0;
-                    int duration = (!pt.isExtendable()) ? 9600 : 3600;
-                    PotionEffectType pet = pt.getPotionEffects().get(0).getType();
+		if (item != null && item.getType() == Material.POTION && item.hasItemMeta() && item.getItemMeta() instanceof PotionMeta potionMeta) {
+			PotionType pt = potionMeta.getBasePotionType();
+			for (Entity ent : b.getWorld().getNearbyEntities(b.getLocation(), 10, 10, 10, LivingEntity.class::isInstance)) {
+				LivingEntity p = (LivingEntity) ent;
+				if (!enabledEntities.get(b.getLocation()).contains(p.getUniqueId())) {
+					int amplifier = (!pt.isUpgradeable()) ? 1 : 0;
+					int duration = (!pt.isExtendable()) ? 9600 : 3600;
+					PotionEffectType pet = pt.getPotionEffects().get(0).getType();
 
-                    if (pet != null) {
-                        PotionEffect pe = new PotionEffect(pet, duration, amplifier);
-                        applyPotionEffect(pe, p);
-                        enabledEntities.get(b.getLocation()).add(p.getUniqueId());
-                    }
-                    
-                }
-            }
-            if (plyrsApplied > 8) {
-                menu.consumeItem(13);
-                plyrsApplied = 0;
-            }
-        }
+					if (pet != null) {
+						PotionEffect pe = new PotionEffect(pet, duration, amplifier);
+						applyPotionEffect(pe, p);
+						enabledEntities.get(b.getLocation()).add(p.getUniqueId());
+					}
+					
+				}
+			}
+			if (plyrsApplied > 8) {
+				menu.consumeItem(13);
+				plyrsApplied = 0;
+			}
+		}
 
-        enabledEntities.getOrDefault(b.getLocation(), new HashSet<>()).removeIf(uuid -> (Bukkit.getEntity(uuid) != null 
-                    && Bukkit.getEntity(uuid) instanceof LivingEntity livingEntity
-                    && livingEntity.getActivePotionEffects().isEmpty())); 
-    }
+		enabledEntities.getOrDefault(b.getLocation(), new HashSet<>()).removeIf(uuid -> (Bukkit.getEntity(uuid) != null 
+					&& Bukkit.getEntity(uuid) instanceof LivingEntity livingEntity
+					&& livingEntity.getActivePotionEffects().isEmpty())); 
+	}
 
-    private void applyPotionEffect(PotionEffect pe, LivingEntity livingEntity) {
-        pe.apply(livingEntity);
-        plyrsApplied++;
-    }
+	private void applyPotionEffect(PotionEffect pe, LivingEntity livingEntity) {
+		pe.apply(livingEntity);
+		plyrsApplied++;
+	}
 
-    @Override
-    protected boolean isSynchronized() {
-        return true;
-    }
+	@Override
+	protected boolean isSynchronized() {
+		return true;
+	}
 }

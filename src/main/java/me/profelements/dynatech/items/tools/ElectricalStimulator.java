@@ -9,16 +9,16 @@ import org.bukkit.inventory.ItemStack;
 
 public class ElectricalStimulator extends UnplaceableBlock implements Rechargeable {
 
-    public ElectricalStimulator(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
-    }
+	public ElectricalStimulator(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
+	}
 
-    @Override
-    public float getMaxItemCharge(ItemStack item) {
-        return 1024;
-    }    
+	@Override
+	public float getMaxItemCharge(ItemStack item) {
+		return 1024;
+	}	
 
-    public float getEnergyComsumption() {
-        return 32f;
-    }
+	public float getEnergyComsumption() {
+		return 32f;
+	}
 }

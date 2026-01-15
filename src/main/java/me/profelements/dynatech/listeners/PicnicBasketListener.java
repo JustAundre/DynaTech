@@ -23,92 +23,92 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class PicnicBasketListener implements Listener {
 
-    private final DynaTech plugin;  
-    private final PicnicBasket picnicBasket;
-    
-    @ParametersAreNonnullByDefault
-    public PicnicBasketListener(DynaTech plugin,PicnicBasket picnicBasket) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	private final DynaTech plugin;  
+	private final PicnicBasket picnicBasket;
+	
+	@ParametersAreNonnullByDefault
+	public PicnicBasketListener(DynaTech plugin,PicnicBasket picnicBasket) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
-        this.plugin = plugin;
-        this.picnicBasket = picnicBasket;
-    }
-    
-    @EventHandler 
-    public void onHungerLoss(FoodLevelChangeEvent e) {
-        if (e.getEntity() instanceof Player player && e.getFoodLevel() < player.getFoodLevel()) {
-            checkAndConsume(player);
-        }
-    }
+		this.plugin = plugin;
+		this.picnicBasket = picnicBasket;
+	}
+	
+	@EventHandler 
+	public void onHungerLoss(FoodLevelChangeEvent e) {
+		if (e.getEntity() instanceof Player player && e.getFoodLevel() < player.getFoodLevel()) {
+			checkAndConsume(player);
+		}
+	}
 
-    @EventHandler 
-    public void onHungerDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player player && e.getCause() == DamageCause.STARVATION) {
-            checkAndConsume(player);
-        }
-    }       
+	@EventHandler 
+	public void onHungerDamage(EntityDamageEvent e) {
+		if (e.getEntity() instanceof Player player && e.getCause() == DamageCause.STARVATION) {
+			checkAndConsume(player);
+		}
+	}	   
 
-    private void checkAndConsume(@Nonnull Player p) {
-        if (picnicBasket == null || picnicBasket.isDisabled()) {
-            return; 
-        }
+	private void checkAndConsume(@Nonnull Player p) {
+		if (picnicBasket == null || picnicBasket.isDisabled()) {
+			return; 
+		}
 
-        for (ItemStack item : p.getInventory().getContents()) {
-            if (picnicBasket.isItem(item) || SlimefunItem.getByItem(item) instanceof PicnicBasket) {
-                if (picnicBasket.canUse(p, true)) {
-                    takeFoodFromPicnicBasket(p, item);
-                } else { 
-                    return; 
-                }
-            }
-        }
-    }
+		for (ItemStack item : p.getInventory().getContents()) {
+			if (picnicBasket.isItem(item) || SlimefunItem.getByItem(item) instanceof PicnicBasket) {
+				if (picnicBasket.canUse(p, true)) {
+					takeFoodFromPicnicBasket(p, item);
+				} else { 
+					return; 
+				}
+			}
+		}
+	}
 
-    private void takeFoodFromPicnicBasket(@Nonnull Player p, @Nonnull ItemStack picnicBasket) {
-        PlayerProfile.getBackpack(picnicBasket, backpack -> {
-            if (backpack != null) {
-                DynaTech.runSync(() -> consumeFood(p, picnicBasket, backpack));
-            }
-        });
+	private void takeFoodFromPicnicBasket(@Nonnull Player p, @Nonnull ItemStack picnicBasket) {
+		PlayerProfile.getBackpack(picnicBasket, backpack -> {
+			if (backpack != null) {
+				DynaTech.runSync(() -> consumeFood(p, picnicBasket, backpack));
+			}
+		});
 
-    }
-    
-    private boolean consumeFood(@Nonnull Player p, @Nonnull ItemStack picnicBasketItem, @Nonnull PlayerBackpack backpack) {
-        Inventory inv = backpack.getInventory();
-        int slot = -1;
+	}
+	
+	private boolean consumeFood(@Nonnull Player p, @Nonnull ItemStack picnicBasketItem, @Nonnull PlayerBackpack backpack) {
+		Inventory inv = backpack.getInventory();
+		int slot = -1;
 
-        for (int i = 0; i < inv.getSize(); i++) {
-            ItemStack item = inv.getItem(i);
-            
-            if (item != null) {
-                    slot = i; 
-            }
-        }
+		for (int i = 0; i < inv.getSize(); i++) {
+			ItemStack item = inv.getItem(i);
+			
+			if (item != null) {
+					slot = i; 
+			}
+		}
 
-        if (slot >= 0) {
-            ItemStack item = inv.getItem(slot); 
-            PicnicBasketFeedPlayerEvent event = new PicnicBasketFeedPlayerEvent(p, picnicBasket, picnicBasketItem, item); 
-            plugin.getServer().getPluginManager().callEvent(event);
+		if (slot >= 0) {
+			ItemStack item = inv.getItem(slot); 
+			PicnicBasketFeedPlayerEvent event = new PicnicBasketFeedPlayerEvent(p, picnicBasket, picnicBasketItem, item); 
+			plugin.getServer().getPluginManager().callEvent(event);
 
-            if (!event.isCancelled()) {
-                for (ItemStack food : PicnicBasket.getFoods().keySet()) {
-                    if (SlimefunUtils.isItemSimilar(food, item, false, false) && (p.getFoodLevel() + PicnicBasket.getFoods().get(food).getFirstValue()) <= 20) {
-                        p.setFoodLevel(p.getFoodLevel() + PicnicBasket.getFoods().get(food).getFirstValue());
-                        p.setSaturation(p.getSaturation() + PicnicBasket.getFoods().get(food).getSecondValue());
-                        p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_BURP, 1F, 1F);
+			if (!event.isCancelled()) {
+				for (ItemStack food : PicnicBasket.getFoods().keySet()) {
+					if (SlimefunUtils.isItemSimilar(food, item, false, false) && (p.getFoodLevel() + PicnicBasket.getFoods().get(food).getFirstValue()) <= 20) {
+						p.setFoodLevel(p.getFoodLevel() + PicnicBasket.getFoods().get(food).getFirstValue());
+						p.setSaturation(p.getSaturation() + PicnicBasket.getFoods().get(food).getSecondValue());
+						p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_BURP, 1F, 1F);
 
-                        if (item.getAmount() > 1) {
-                            item.setAmount(item.getAmount() - 1);
-                        } else {
-                            inv.setItem(slot, null);
-                        }
+						if (item.getAmount() > 1) {
+							item.setAmount(item.getAmount() - 1);
+						} else {
+							inv.setItem(slot, null);
+						}
 
-                        backpack.markDirty();
-                        return true; 
-                    }
-                }
-            }
-        }
-        return false;
-    }
+						backpack.markDirty();
+						return true; 
+					}
+				}
+			}
+		}
+		return false;
+	}
 }

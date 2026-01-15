@@ -11,55 +11,55 @@ import org.bukkit.inventory.ItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 
 public class RecipeRegistry {
-    private static final ArrayList<Recipe> RECIPES = new ArrayList<>();
-    private static RecipeRegistry INSTANCE;
+	private static final ArrayList<Recipe> RECIPES = new ArrayList<>();
+	private static RecipeRegistry INSTANCE;
 
-    private RecipeRegistry() {
-        INSTANCE = this;
-    }
+	private RecipeRegistry() {
+		INSTANCE = this;
+	}
 
-    public static RecipeRegistry getInstance() {
-        return INSTANCE;
-    }
+	public static RecipeRegistry getInstance() {
+		return INSTANCE;
+	}
 
-    public static RecipeRegistry init() {
-        return new RecipeRegistry();
-    }
+	public static RecipeRegistry init() {
+		return new RecipeRegistry();
+	}
 
-    public RecipeRegistry addRecipe(Recipe recipe) {
-        RECIPES.add(recipe);
-        return this;
-    }
+	public RecipeRegistry addRecipe(Recipe recipe) {
+		RECIPES.add(recipe);
+		return this;
+	}
 
-    public final ArrayList<Recipe> getRecipes() {
-        return RECIPES;
-    }
+	public final ArrayList<Recipe> getRecipes() {
+		return RECIPES;
+	}
 
-    public final Recipe getRecipeByKey(NamespacedKey key) {
-        List<Recipe> matches = getRecipes().stream().filter(r -> r.getKey().equals(key)).collect(Collectors.toList());
-        return matches.isEmpty() ? null : matches.get(0);
-    }
+	public final Recipe getRecipeByKey(NamespacedKey key) {
+		List<Recipe> matches = getRecipes().stream().filter(r -> r.getKey().equals(key)).collect(Collectors.toList());
+		return matches.isEmpty() ? null : matches.get(0);
+	}
 
-    public final Stream<Recipe> getRecipesByRecipeType(RecipeType type) {
-        return getRecipes().stream().filter(r -> r.getRecipeType().equals(type));
-    }
+	public final Stream<Recipe> getRecipesByRecipeType(RecipeType type) {
+		return getRecipes().stream().filter(r -> r.getRecipeType().equals(type));
+	}
 
-    public final Stream<Recipe> getRecipesByInput(ItemStack[] input) {
-        return getRecipes().stream().filter(r -> r.getInput().equals(input));
-    }
+	public final Stream<Recipe> getRecipesByInput(ItemStack[] input) {
+		return getRecipes().stream().filter(r -> r.getInput().equals(input));
+	}
 
-    public final Stream<Recipe> getRecipesByOutput(ItemStack output) {
-        return getRecipes().stream().filter(r -> r.getOutput()[0].equals(output));
-    }
+	public final Stream<Recipe> getRecipesByOutput(ItemStack output) {
+		return getRecipes().stream().filter(r -> r.getOutput()[0].equals(output));
+	}
 
-    public final Stream<Recipe> getRecipeByOutputs(ItemStack[] outputs) {
-        return getRecipes().stream().filter(r -> r.getOutput().equals(outputs));
-    }
+	public final Stream<Recipe> getRecipeByOutputs(ItemStack[] outputs) {
+		return getRecipes().stream().filter(r -> r.getOutput().equals(outputs));
+	}
 
-    public final boolean isMatching(RecipeType type, ItemStack[] input, ItemStack output) {
-        List<Recipe> recipes = getRecipesByRecipeType(type).filter(r -> r.getOutput().equals(output))
-                .filter(r -> r.getInput().equals(input)).collect(Collectors.toList());
-        return !recipes.isEmpty();
-    }
+	public final boolean isMatching(RecipeType type, ItemStack[] input, ItemStack output) {
+		List<Recipe> recipes = getRecipesByRecipeType(type).filter(r -> r.getOutput().equals(output))
+				.filter(r -> r.getInput().equals(input)).collect(Collectors.toList());
+		return !recipes.isEmpty();
+	}
 
 }

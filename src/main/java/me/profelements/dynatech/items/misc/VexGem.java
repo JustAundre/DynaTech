@@ -14,29 +14,29 @@ import org.bukkit.inventory.ItemStack;
 
 public class VexGem extends SlimefunItem implements NotPlaceable, RandomMobDrop {
 
-    private final ItemSetting<Boolean> dropSetting = new ItemSetting<>(this, " drop-from-vexs", true);
-    private final ItemSetting<Integer> chance = new IntRangeSetting(this ,"vex-drop-chance", 0, 10, 100);
+	private final ItemSetting<Boolean> dropSetting = new ItemSetting<>(this, " drop-from-vexs", true);
+	private final ItemSetting<Integer> chance = new IntRangeSetting(this ,"vex-drop-chance", 0, 10, 100);
 
-    public VexGem(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
+	public VexGem(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
 
-        addItemSetting(dropSetting);
-        addItemSetting(chance);
+		addItemSetting(dropSetting);
+		addItemSetting(chance);
 
-        addItemHandler(getItemHandler());
-    }
+		addItemHandler(getItemHandler());
+	}
 
-    @Override
-    public int getMobDropChance() {
-        return chance.getValue();
-    }
+	@Override
+	public int getMobDropChance() {
+		return chance.getValue();
+	}
 
-    public boolean isDroppedFromVexs() {
-        return dropSetting.getValue();
-    }
+	public boolean isDroppedFromVexs() {
+		return dropSetting.getValue();
+	}
 
-    public ItemUseHandler getItemHandler() {
-        return PlayerRightClickEvent::cancel;
-    }
+	public ItemUseHandler getItemHandler() {
+		return PlayerRightClickEvent::cancel;
+	}
 
 }

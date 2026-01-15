@@ -26,66 +26,66 @@ import java.util.List;
 
 public class DimensionalHome extends SlimefunItem {
 
-    private static final NamespacedKey CHUNK_KEY = new NamespacedKey(DynaTech.getInstance(), "chunk-key");
-    private static final World DIM_HOME_WORLD = Bukkit.getServer().getWorld("dimensionalhome");
-    private static final Config CURRENT_HIGHEST_CHUNK_ID = new Config("plugins/DynaTech/current-chunk-highest.yml");
-    private int id = CURRENT_HIGHEST_CHUNK_ID.getInt("current-chunk-highest-id");
+	private static final NamespacedKey CHUNK_KEY = new NamespacedKey(DynaTech.getInstance(), "chunk-key");
+	private static final World DIM_HOME_WORLD = Bukkit.getServer().getWorld("dimensionalhome");
+	private static final Config CURRENT_HIGHEST_CHUNK_ID = new Config("plugins/DynaTech/current-chunk-highest.yml");
+	private int id = CURRENT_HIGHEST_CHUNK_ID.getInt("current-chunk-highest-id");
 
-    public DimensionalHome(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
-        addItemHandler(onRightClick());
-    }
+	public DimensionalHome(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
+		addItemHandler(onRightClick());
+	}
 
-    public ItemUseHandler onRightClick() {
-        return new ItemUseHandler() {
-            @Override
-            public void onRightClick(PlayerRightClickEvent e) {
-                e.cancel();
+	public ItemUseHandler onRightClick() {
+		return new ItemUseHandler() {
+			@Override
+			public void onRightClick(PlayerRightClickEvent e) {
+				e.cancel();
 
-                Player p = e.getPlayer();
-                ItemStack item = e.getItem();
-                int chunkKey = PersistentDataAPI.getInt(item.getItemMeta(), CHUNK_KEY);
+				Player p = e.getPlayer();
+				ItemStack item = e.getItem();
+				int chunkKey = PersistentDataAPI.getInt(item.getItemMeta(), CHUNK_KEY);
 
-                if (SlimefunUtils.isItemSimilar(item, Items.DIMENSIONAL_HOME.stack().item(), true)) {
-                    if (chunkKey > 0) {
-                        if (p.getLocation().getWorld() != DIM_HOME_WORLD) {
-                            Location dimHomeLocation = new Location(DIM_HOME_WORLD, 16 * chunkKey + 8d, 65, 8);
-                            PaperLib.teleportAsync(p, dimHomeLocation);
-                        } else {
-                            if (p.getRespawnLocation() != null) {
-                                PaperLib.teleportAsync(p, p.getRespawnLocation());
-                            } else {
-                                PaperLib.teleportAsync(p, Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
-                            }
-                        }
-                    } else {
-                        // Setup ChunkKey
-                        updateLore(item);
-                    }
-                }
-            }
-        };
-    }
+				if (SlimefunUtils.isItemSimilar(item, Items.DIMENSIONAL_HOME.stack().item(), true)) {
+					if (chunkKey > 0) {
+						if (p.getLocation().getWorld() != DIM_HOME_WORLD) {
+							Location dimHomeLocation = new Location(DIM_HOME_WORLD, 16 * chunkKey + 8d, 65, 8);
+							PaperLib.teleportAsync(p, dimHomeLocation);
+						} else {
+							if (p.getRespawnLocation() != null) {
+								PaperLib.teleportAsync(p, p.getRespawnLocation());
+							} else {
+								PaperLib.teleportAsync(p, Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
+							}
+						}
+					} else {
+						// Setup ChunkKey
+						updateLore(item);
+					}
+				}
+			}
+		};
+	}
 
-    private void updateLore(@Nonnull ItemStack item) {
-        ItemMeta im = item.getItemMeta();
-        List<String> lore = im.getLore();
+	private void updateLore(@Nonnull ItemStack item) {
+		ItemMeta im = item.getItemMeta();
+		List<String> lore = im.getLore();
 
-        for (int line = 0; line < lore.size(); line++) {
-            if (lore.get(line).contains("CHUNK ID: <id>")) {
-                id++;
-                lore.set(line, lore.get(line).replace("<id>", String.valueOf(id)));
-                PersistentDataAPI.setInt(im, CHUNK_KEY, id);
+		for (int line = 0; line < lore.size(); line++) {
+			if (lore.get(line).contains("CHUNK ID: <id>")) {
+				id++;
+				lore.set(line, lore.get(line).replace("<id>", String.valueOf(id)));
+				PersistentDataAPI.setInt(im, CHUNK_KEY, id);
 
-                // THIS IS PROBABLY BAD AND A BAD WAY TO KEEP AN CHUNK ID
-                CURRENT_HIGHEST_CHUNK_ID.setValue("current-chunk-highest-id", id);
-                CURRENT_HIGHEST_CHUNK_ID.save();
-            }
+				// THIS IS PROBABLY BAD AND A BAD WAY TO KEEP AN CHUNK ID
+				CURRENT_HIGHEST_CHUNK_ID.setValue("current-chunk-highest-id", id);
+				CURRENT_HIGHEST_CHUNK_ID.save();
+			}
 
-        }
+		}
 
-        im.setLore(lore);
-        item.setItemMeta(im);
-    }
+		im.setLore(lore);
+		item.setItemMeta(im);
+	}
 
 }

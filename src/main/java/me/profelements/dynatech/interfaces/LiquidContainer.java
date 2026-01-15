@@ -4,11 +4,11 @@ import me.profelements.dynatech.utils.Liquid;
 
 public interface LiquidContainer {
 
-    Liquid getLiquid();
+	Liquid getLiquid();
 
-    int getLiquidCapacity();
+	int getLiquidCapacity();
 
-    default boolean isFinite() {
-        return true;
-    }
+	default boolean isFinite() {
+		return true;
+	}
 }

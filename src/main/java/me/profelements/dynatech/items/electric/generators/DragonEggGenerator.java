@@ -16,22 +16,22 @@ import javax.annotation.Nonnull;
 
 public class DragonEggGenerator extends SlimefunItem implements EnergyNetProvider {
 
-    public DragonEggGenerator(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
-    }
+	public DragonEggGenerator(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
+	}
 
-    @Override
-    public int getGeneratedOutput(@Nonnull Location location, @Nonnull Config config) {
-        Block dragonEgg = location.getBlock().getRelative(BlockFace.UP);
-        if (dragonEgg.getType() == Material.DRAGON_EGG) {
-            return 32;
-        }
+	@Override
+	public int getGeneratedOutput(@Nonnull Location location, @Nonnull Config config) {
+		Block dragonEgg = location.getBlock().getRelative(BlockFace.UP);
+		if (dragonEgg.getType() == Material.DRAGON_EGG) {
+			return 32;
+		}
 
-        return 0;
-    }
+		return 0;
+	}
 
-    @Override
-    public int getCapacity() {
-        return 512;
-    }
+	@Override
+	public int getCapacity() {
+		return 512;
+	}
 }

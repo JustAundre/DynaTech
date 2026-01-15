@@ -13,36 +13,36 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 public abstract class AbstractTickingContainer extends AbstractContainer {
-    
-    protected AbstractTickingContainer(ItemGroup itemGroup, SlimefunItemStack item ,RecipeType recipeType, ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe); 
-    }
+	
+	protected AbstractTickingContainer(ItemGroup itemGroup, SlimefunItemStack item ,RecipeType recipeType, ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe); 
+	}
 
-    @Override
-    public void preRegister() {
-        super.preRegister();
+	@Override
+	public void preRegister() {
+		super.preRegister();
 
-        addItemHandler(new BlockTicker() {
-            @Override
-            public boolean isSynchronized() {
-                return AbstractTickingContainer.this.isSynchronized();
-            }
+		addItemHandler(new BlockTicker() {
+			@Override
+			public boolean isSynchronized() {
+				return AbstractTickingContainer.this.isSynchronized();
+			}
 
-            @Override
-            public void tick(Block b, SlimefunItem item, Config data) {
-                BlockMenu menu = BlockStorage.getInventory(b);
-                if (menu != null) {
-                    AbstractTickingContainer.this.tick(menu, b);
-                }
-            }
+			@Override
+			public void tick(Block b, SlimefunItem item, Config data) {
+				BlockMenu menu = BlockStorage.getInventory(b);
+				if (menu != null) {
+					AbstractTickingContainer.this.tick(menu, b);
+				}
+			}
 
-        }); 
-    }
-    
-    protected abstract void tick(BlockMenu menu, Block b); 
+		}); 
+	}
+	
+	protected abstract void tick(BlockMenu menu, Block b); 
 
-    protected boolean isSynchronized() {
-        return false;
-    }
+	protected boolean isSynchronized() {
+		return false;
+	}
 
 }

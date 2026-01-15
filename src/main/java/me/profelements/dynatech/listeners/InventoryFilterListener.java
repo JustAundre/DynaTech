@@ -20,52 +20,52 @@ import javax.annotation.Nonnull;
 
 public class InventoryFilterListener implements Listener {
 
-    public InventoryFilterListener(@Nonnull DynaTech plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
+	public InventoryFilterListener(@Nonnull DynaTech plugin) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
 
-    @EventHandler
-    private void onPlayerAttemptPickup(EntityPickupItemEvent e) {
-        if (e.getEntity() instanceof Player p) {
-            filterInventory(p, e);
-        }
-    }
+	@EventHandler
+	private void onPlayerAttemptPickup(EntityPickupItemEvent e) {
+		if (e.getEntity() instanceof Player p) {
+			filterInventory(p, e);
+		}
+	}
 
-    private void filterInventory(Player player, EntityPickupItemEvent event) {
-        List<String> slimefunItems = new ArrayList<>();
-        List<ItemStack> regItems = new ArrayList<>();
-        for (ItemStack stack : player.getInventory().getContents()) {
-            if (SlimefunItem.getByItem(stack) instanceof InventoryFilter) {
-                PlayerProfile.getBackpack(stack, backpack -> {
-                    for (ItemStack bpStack : backpack.getInventory().getContents()) {
-                        SlimefunItem item = SlimefunItem.getByItem(bpStack);
-                        if (item != null) {
-                            slimefunItems.add(item.getId());
-                        } else {
-                            regItems.add(bpStack);
-                        }
-                    }
-                });
-            }
-        }
+	private void filterInventory(Player player, EntityPickupItemEvent event) {
+		List<String> slimefunItems = new ArrayList<>();
+		List<ItemStack> regItems = new ArrayList<>();
+		for (ItemStack stack : player.getInventory().getContents()) {
+			if (SlimefunItem.getByItem(stack) instanceof InventoryFilter) {
+				PlayerProfile.getBackpack(stack, backpack -> {
+					for (ItemStack bpStack : backpack.getInventory().getContents()) {
+						SlimefunItem item = SlimefunItem.getByItem(bpStack);
+						if (item != null) {
+							slimefunItems.add(item.getId());
+						} else {
+							regItems.add(bpStack);
+						}
+					}
+				});
+			}
+		}
 
-        Item itemEntity = event.getItem();
-        ItemStack itemEntityStack = itemEntity.getItemStack();
+		Item itemEntity = event.getItem();
+		ItemStack itemEntityStack = itemEntity.getItemStack();
 
-        for (ItemStack checkStack : regItems) {
-            if (checkStack != null && checkStack.isSimilar(itemEntityStack)) {
-                itemEntity.remove();
-                event.setCancelled(true);
-                break;
-            }
-        }
+		for (ItemStack checkStack : regItems) {
+			if (checkStack != null && checkStack.isSimilar(itemEntityStack)) {
+				itemEntity.remove();
+				event.setCancelled(true);
+				break;
+			}
+		}
 
-        SlimefunItem item = SlimefunItem.getByItem(itemEntityStack);
-        if (item != null
-                && slimefunItems.contains(item.getId())) {
-            itemEntity.remove();
-            event.setCancelled(true);
-        }
+		SlimefunItem item = SlimefunItem.getByItem(itemEntityStack);
+		if (item != null
+				&& slimefunItems.contains(item.getId())) {
+			itemEntity.remove();
+			event.setCancelled(true);
+		}
 
-    }
+	}
 }

@@ -16,87 +16,87 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 public class EnergyUtils {
 
-    private EnergyUtils() {
-    }
+	private EnergyUtils() {
+	}
 
-    public static final int moveEnergyFromTo(BlockPosition from, BlockPosition to, int fromEnergyRate,
-            int toEnergyMax) {
-        Location fromLocation = from.toLocation();
-        Location toLocation = to.toLocation();
-        String energyKey = "energy-charge";
+	public static final int moveEnergyFromTo(BlockPosition from, BlockPosition to, int fromEnergyRate,
+			int toEnergyMax) {
+		Location fromLocation = from.toLocation();
+		Location toLocation = to.toLocation();
+		String energyKey = "energy-charge";
 
-        String fromEnergyAmount = BlockStorage.getLocationInfo(fromLocation, energyKey);
-        String toEnergyAmount = BlockStorage.getLocationInfo(toLocation, energyKey);
-        if (fromEnergyAmount == null || toEnergyAmount == null) {
-            return 0;
-        }
+		String fromEnergyAmount = BlockStorage.getLocationInfo(fromLocation, energyKey);
+		String toEnergyAmount = BlockStorage.getLocationInfo(toLocation, energyKey);
+		if (fromEnergyAmount == null || toEnergyAmount == null) {
+			return 0;
+		}
 
-        int fromEnergy = Integer.parseInt(fromEnergyAmount);
-        int toEnergy = Integer.parseInt(toEnergyAmount);
+		int fromEnergy = Integer.parseInt(fromEnergyAmount);
+		int toEnergy = Integer.parseInt(toEnergyAmount);
 
-        int energyToTransfer = Math.min(fromEnergyRate, Math.min(toEnergyMax - toEnergy, fromEnergy));
+		int energyToTransfer = Math.min(fromEnergyRate, Math.min(toEnergyMax - toEnergy, fromEnergy));
 
-        int newFromEnergy = fromEnergy - energyToTransfer;
-        int newToEnergy = toEnergy + energyToTransfer;
+		int newFromEnergy = fromEnergy - energyToTransfer;
+		int newToEnergy = toEnergy + energyToTransfer;
 
-        BlockStorage.addBlockInfo(fromLocation, energyKey, String.valueOf(newFromEnergy));
-        BlockStorage.addBlockInfo(toLocation, energyKey, String.valueOf(newToEnergy));
+		BlockStorage.addBlockInfo(fromLocation, energyKey, String.valueOf(newFromEnergy));
+		BlockStorage.addBlockInfo(toLocation, energyKey, String.valueOf(newToEnergy));
 
-        return energyToTransfer;
-    }
+		return energyToTransfer;
+	}
 
-    public static final void moveInventoryFromTo(BlockPosition from, BlockPosition to, int[] fromSlots, int[] toSlots) {
-        BlockMenu fromMenu = BlockStorage.getInventory(from.toLocation());
-        BlockMenu toMenu = BlockStorage.getInventory(to.toLocation());
-        if (fromMenu == null || toMenu == null) {
-            return;
-        }
+	public static final void moveInventoryFromTo(BlockPosition from, BlockPosition to, int[] fromSlots, int[] toSlots) {
+		BlockMenu fromMenu = BlockStorage.getInventory(from.toLocation());
+		BlockMenu toMenu = BlockStorage.getInventory(to.toLocation());
+		if (fromMenu == null || toMenu == null) {
+			return;
+		}
 
-        Map<Integer, ItemStack> itemsToTransfer = new HashMap<Integer, ItemStack>(fromSlots.length);
-        for (int slot : fromSlots) {
-            ItemStack stack = fromMenu.getItemInSlot(slot);
+		Map<Integer, ItemStack> itemsToTransfer = new HashMap<Integer, ItemStack>(fromSlots.length);
+		for (int slot : fromSlots) {
+			ItemStack stack = fromMenu.getItemInSlot(slot);
 
-            if (stack == null) {
-                continue;
-            }
+			if (stack == null) {
+				continue;
+			}
 
-            itemsToTransfer.put(slot, stack);
-        }
+			itemsToTransfer.put(slot, stack);
+		}
 
-        if (itemsToTransfer.isEmpty()) {
-            return;
-        }
+		if (itemsToTransfer.isEmpty()) {
+			return;
+		}
 
-        List<Integer> emptySlots = new ArrayList<>(toSlots.length);
-        for (int slot : toSlots) {
-            ItemStack stack = toMenu.getItemInSlot(slot);
-            // Skips currently occupied slots (should probably do this better
-            if (stack != null) {
-                continue;
-            }
+		List<Integer> emptySlots = new ArrayList<>(toSlots.length);
+		for (int slot : toSlots) {
+			ItemStack stack = toMenu.getItemInSlot(slot);
+			// Skips currently occupied slots (should probably do this better
+			if (stack != null) {
+				continue;
+			}
 
-            emptySlots.add(slot);
-        }
+			emptySlots.add(slot);
+		}
 
-        Iterator<Map.Entry<Integer, ItemStack>> entryIter = itemsToTransfer.entrySet().iterator();
-        for (int slot : emptySlots) {
-            if (!entryIter.hasNext()) {
-                return;
-            }
+		Iterator<Map.Entry<Integer, ItemStack>> entryIter = itemsToTransfer.entrySet().iterator();
+		for (int slot : emptySlots) {
+			if (!entryIter.hasNext()) {
+				return;
+			}
 
-            Map.Entry<Integer, ItemStack> entry = entryIter.next();
-            // if (entry == null) {
-            // return;
-            // }
+			Map.Entry<Integer, ItemStack> entry = entryIter.next();
+			// if (entry == null) {
+			// return;
+			// }
 
-            int fromSlot = entry.getKey();
-            ItemStack item = entry.getValue();
+			int fromSlot = entry.getKey();
+			ItemStack item = entry.getValue();
 
-            toMenu.toInventory().setItem(slot, item);
-            fromMenu.replaceExistingItem(fromSlot, new ItemStack(Material.AIR, 0));
-        }
+			toMenu.toInventory().setItem(slot, item);
+			fromMenu.replaceExistingItem(fromSlot, new ItemStack(Material.AIR, 0));
+		}
 
-        fromMenu.markDirty();
-        toMenu.markDirty();
-    }
+		fromMenu.markDirty();
+		toMenu.markDirty();
+	}
 }

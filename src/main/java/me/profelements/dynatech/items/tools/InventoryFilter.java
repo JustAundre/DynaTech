@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryFilter extends SlimefunBackpack {
 
-    public InventoryFilter(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        super(9, itemGroup, item, recipeType, recipe);
-    }
-    
+	public InventoryFilter(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+		super(9, itemGroup, item, recipeType, recipe);
+	}
+	
 }

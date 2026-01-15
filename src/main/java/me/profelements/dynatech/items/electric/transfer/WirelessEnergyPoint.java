@@ -39,155 +39,155 @@ import java.util.concurrent.CompletableFuture;
 
 public class WirelessEnergyPoint extends SlimefunItem implements EnergyNetProvider {
 
-    private static final NamespacedKey WIRELESS_LOCATION_KEY = new NamespacedKey(DynaTech.getInstance(),
-            "wireless-location");
-    private final int capacity;
-    private final int energyRate;
+	private static final NamespacedKey WIRELESS_LOCATION_KEY = new NamespacedKey(DynaTech.getInstance(),
+			"wireless-location");
+	private final int capacity;
+	private final int energyRate;
 
-    @ParametersAreNonnullByDefault
-    public WirelessEnergyPoint(ItemGroup itemGroup, int capacity, int energyRate, SlimefunItemStack item,
-            RecipeType recipeType, ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
+	@ParametersAreNonnullByDefault
+	public WirelessEnergyPoint(ItemGroup itemGroup, int capacity, int energyRate, SlimefunItemStack item,
+			RecipeType recipeType, ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
 
-        this.capacity = capacity;
-        this.energyRate = energyRate;
+		this.capacity = capacity;
+		this.energyRate = energyRate;
 
-        addItemHandler(onRightClick(), onBlockPlace(), onBlockBreak());
-    }
+		addItemHandler(onRightClick(), onBlockPlace(), onBlockBreak());
+	}
 
-    @Override
-    public int getGeneratedOutput(Location l, Config data) {
-        String wirelessBankLocation = BlockStorage.getLocationInfo(l, "wireless-location");
+	@Override
+	public int getGeneratedOutput(Location l, Config data) {
+		String wirelessBankLocation = BlockStorage.getLocationInfo(l, "wireless-location");
 
-        int chargedNeeded = getCapacity() - getCharge(l);
+		int chargedNeeded = getCapacity() - getCharge(l);
 
-        if (chargedNeeded != 0 && wirelessBankLocation != null) {
-            Location wirelessEnergyBank = stringToLocation(wirelessBankLocation);
+		if (chargedNeeded != 0 && wirelessBankLocation != null) {
+			Location wirelessEnergyBank = stringToLocation(wirelessBankLocation);
 
-            // Note: You should probably also see if the Future from getChunkAtAsync is
-            // finished here.
-            // you don't really want to possibly trigger the chunk to load in another thread
-            // twice.
-            if (!wirelessEnergyBank.getWorld().isChunkLoaded(wirelessEnergyBank.getBlockX() >> 4,
-                    wirelessEnergyBank.getBlockZ() >> 4)) {
-                CompletableFuture<Chunk> chunkLoad = PaperLib.getChunkAtAsync(wirelessEnergyBank);
-                if (!chunkLoad.isDone()) {
-                    return 0;
-                }
-            }
+			// Note: You should probably also see if the Future from getChunkAtAsync is
+			// finished here.
+			// you don't really want to possibly trigger the chunk to load in another thread
+			// twice.
+			if (!wirelessEnergyBank.getWorld().isChunkLoaded(wirelessEnergyBank.getBlockX() >> 4,
+					wirelessEnergyBank.getBlockZ() >> 4)) {
+				CompletableFuture<Chunk> chunkLoad = PaperLib.getChunkAtAsync(wirelessEnergyBank);
+				if (!chunkLoad.isDone()) {
+					return 0;
+				}
+			}
 
-            if (BlockStorage.checkID(wirelessEnergyBank) != null && BlockStorage.checkID(wirelessEnergyBank)
-                    .equals(Items.WIRELESS_ENERGY_BANK.stack().getItemId())) {
+			if (BlockStorage.checkID(wirelessEnergyBank) != null && BlockStorage.checkID(wirelessEnergyBank)
+					.equals(Items.WIRELESS_ENERGY_BANK.stack().getItemId())) {
 
-                String energyCharge = BlockStorage.getLocationInfo(l, "energy-charge");
-                if (energyCharge == null) {
-                    BlockStorage.addBlockInfo(l, "energy-charge", String.valueOf(0));
-                }
+				String energyCharge = BlockStorage.getLocationInfo(l, "energy-charge");
+				if (energyCharge == null) {
+					BlockStorage.addBlockInfo(l, "energy-charge", String.valueOf(0));
+				}
 
-                EnergyUtils.moveEnergyFromTo(new BlockPosition(wirelessEnergyBank), new BlockPosition(l),
-                        getEnergyRate(), getCapacity());
-            }
-            return 0;
-        }
-        return 0;
-    }
+				EnergyUtils.moveEnergyFromTo(new BlockPosition(wirelessEnergyBank), new BlockPosition(l),
+						getEnergyRate(), getCapacity());
+			}
+			return 0;
+		}
+		return 0;
+	}
 
-    private ItemHandler onRightClick() {
-        return new ItemUseHandler() {
+	private ItemHandler onRightClick() {
+		return new ItemUseHandler() {
 
-            @Override
-            public void onRightClick(PlayerRightClickEvent event) {
+			@Override
+			public void onRightClick(PlayerRightClickEvent event) {
 
-                Optional<Block> blockClicked = event.getClickedBlock();
-                Optional<SlimefunItem> sfBlockClicked = event.getSlimefunBlock();
-                if (blockClicked.isPresent() && sfBlockClicked.isPresent()) {
-                    Location blockLoc = blockClicked.get().getLocation();
-                    SlimefunItem sfBlock = sfBlockClicked.get();
-                    ItemStack item = event.getItem();
+				Optional<Block> blockClicked = event.getClickedBlock();
+				Optional<SlimefunItem> sfBlockClicked = event.getSlimefunBlock();
+				if (blockClicked.isPresent() && sfBlockClicked.isPresent()) {
+					Location blockLoc = blockClicked.get().getLocation();
+					SlimefunItem sfBlock = sfBlockClicked.get();
+					ItemStack item = event.getItem();
 
-                    if (sfBlock != null
-                            && Slimefun.getProtectionManager().hasPermission(event.getPlayer(), blockLoc,
-                                    Interaction.INTERACT_BLOCK)
-                            && sfBlock.getId().equals(Items.WIRELESS_ENERGY_BANK.stack().getItemId())
-                            && blockLoc != null) {
-                        event.cancel();
-                        ItemMeta im = item.getItemMeta();
-                        String locationString = locationToString(blockLoc);
+					if (sfBlock != null
+							&& Slimefun.getProtectionManager().hasPermission(event.getPlayer(), blockLoc,
+									Interaction.INTERACT_BLOCK)
+							&& sfBlock.getId().equals(Items.WIRELESS_ENERGY_BANK.stack().getItemId())
+							&& blockLoc != null) {
+						event.cancel();
+						ItemMeta im = item.getItemMeta();
+						String locationString = locationToString(blockLoc);
 
-                        PersistentDataAPI.setString(im, WIRELESS_LOCATION_KEY, locationString);
-                        item.setItemMeta(im);
-                        setItemLore(item, blockLoc);
-                    }
-                }
-            }
-        };
-    }
+						PersistentDataAPI.setString(im, WIRELESS_LOCATION_KEY, locationString);
+						item.setItemMeta(im);
+						setItemLore(item, blockLoc);
+					}
+				}
+			}
+		};
+	}
 
-    private ItemHandler onBlockPlace() {
-        return new BlockPlaceHandler(false) {
-            @Override
-            public void onPlayerPlace(BlockPlaceEvent event) {
+	private ItemHandler onBlockPlace() {
+		return new BlockPlaceHandler(false) {
+			@Override
+			public void onPlayerPlace(BlockPlaceEvent event) {
 
-                Location blockLoc = event.getBlockPlaced().getLocation();
-                ItemStack item = event.getItemInHand();
-                String locationString = PersistentDataAPI.getString(item.getItemMeta(), WIRELESS_LOCATION_KEY);
+				Location blockLoc = event.getBlockPlaced().getLocation();
+				ItemStack item = event.getItemInHand();
+				String locationString = PersistentDataAPI.getString(item.getItemMeta(), WIRELESS_LOCATION_KEY);
 
-                if (item.getType() == Items.WIRELESS_ENERGY_POINT.stack().getType() && item.hasItemMeta()
-                        && locationString != null) {
-                    BlockStorage.addBlockInfo(blockLoc, "wireless-location", locationString);
+				if (item.getType() == Items.WIRELESS_ENERGY_POINT.stack().getType() && item.hasItemMeta()
+						&& locationString != null) {
+					BlockStorage.addBlockInfo(blockLoc, "wireless-location", locationString);
 
-                }
-            }
+				}
+			}
 
-        };
-    }
+		};
+	}
 
-    private ItemHandler onBlockBreak() {
-        return new BlockBreakHandler(false, false) {
+	private ItemHandler onBlockBreak() {
+		return new BlockBreakHandler(false, false) {
 
-            @Override
-            public void onPlayerBreak(BlockBreakEvent event, ItemStack block, List<ItemStack> drops) {
-                BlockStorage.clearBlockInfo(event.getBlock().getLocation());
-            }
+			@Override
+			public void onPlayerBreak(BlockBreakEvent event, ItemStack block, List<ItemStack> drops) {
+				BlockStorage.clearBlockInfo(event.getBlock().getLocation());
+			}
 
-        };
-    }
+		};
+	}
 
-    @Override
-    public int getCapacity() {
-        return capacity;
-    }
+	@Override
+	public int getCapacity() {
+		return capacity;
+	}
 
-    public int getEnergyRate() {
-        return energyRate;
-    }
+	public int getEnergyRate() {
+		return energyRate;
+	}
 
-    private void setItemLore(ItemStack item, Location l) {
-        ItemMeta im = item.getItemMeta();
-        List<Component> lore = im.lore();
-        for (int i = 0; i < lore.size(); i++) {
-            if (lore.get(i).contains(Component.text("Location: "))) {
-                lore.remove(i);
-            }
-        }
+	private void setItemLore(ItemStack item, Location l) {
+		ItemMeta im = item.getItemMeta();
+		List<Component> lore = im.lore();
+		for (int i = 0; i < lore.size(); i++) {
+			if (lore.get(i).contains(Component.text("Location: "))) {
+				lore.remove(i);
+			}
+		}
 
-        lore.add(Component.text(
-                ChatColor.WHITE + "Location: " + l.getWorld().getName() + " " + l.getBlockX() + " " + l.getBlockY()
-                        + " " + l.getBlockZ()));
+		lore.add(Component.text(
+				ChatColor.WHITE + "Location: " + l.getWorld().getName() + " " + l.getBlockX() + " " + l.getBlockY()
+						+ " " + l.getBlockZ()));
 
-        im.lore(lore);
-        item.setItemMeta(im);
+		im.lore(lore);
+		item.setItemMeta(im);
 
-    }
+	}
 
-    private String locationToString(Location l) {
-        return l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ();
-    }
+	private String locationToString(Location l) {
+		return l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ();
+	}
 
-    private Location stringToLocation(String str) {
-        String[] locComponents = str.split(":");
-        return new Location(Bukkit.getWorld(locComponents[0]), Double.parseDouble(locComponents[1]),
-                Double.parseDouble(locComponents[2]), Double.parseDouble(locComponents[3]));
-    }
+	private Location stringToLocation(String str) {
+		String[] locComponents = str.split(":");
+		return new Location(Bukkit.getWorld(locComponents[0]), Double.parseDouble(locComponents[1]),
+				Double.parseDouble(locComponents[2]), Double.parseDouble(locComponents[3]));
+	}
 
 }

@@ -13,23 +13,23 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 
 public class BlockBreakBlockListener implements Listener {
 
-    public BlockBreakBlockListener(Plugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
+	public BlockBreakBlockListener(Plugin plugin) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
 
-    @EventHandler
-    public void onBlockBreakBlock(BlockBreakBlockEvent event) {
+	@EventHandler
+	public void onBlockBreakBlock(BlockBreakBlockEvent event) {
 
-        SlimefunItem sfItem = BlockStorage.check(event.getBlock());
+		SlimefunItem sfItem = BlockStorage.check(event.getBlock());
 
-        if (sfItem != null) {
-            BlockStorage.clearBlockInfo(event.getBlock());
+		if (sfItem != null) {
+			BlockStorage.clearBlockInfo(event.getBlock());
 
-            List<ItemStack> drops = event.getDrops();
-            drops.clear();
+			List<ItemStack> drops = event.getDrops();
+			drops.clear();
 
-            drops.add(sfItem.getItem());
-        }
-    }
+			drops.add(sfItem.getItem());
+		}
+	}
 
 }

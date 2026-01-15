@@ -10,20 +10,20 @@ import me.profelements.dynatech.utils.Recipe;
 
 public class RecipeBook extends SlimefunItem {
 
-    public RecipeBook(ItemGroup itemGroup, SlimefunItemStack stack, Recipe recipe) {
-        super(itemGroup, stack, recipe.getRecipeType(), recipe.getInput());
+	public RecipeBook(ItemGroup itemGroup, SlimefunItemStack stack, Recipe recipe) {
+		super(itemGroup, stack, recipe.getRecipeType(), recipe.getInput());
 
-        addItemHandler(onRightClick());
-    }
+		addItemHandler(onRightClick());
+	}
 
-    private final ItemUseHandler onRightClick() {
-        return new ItemUseHandler() {
+	private final ItemUseHandler onRightClick() {
+		return new ItemUseHandler() {
 
-            @Override
-            public void onRightClick(PlayerRightClickEvent e) {
-                ChestMenuUtils.openRecipeBook(e.getPlayer());
-            }
+			@Override
+			public void onRightClick(PlayerRightClickEvent e) {
+				ChestMenuUtils.openRecipeBook(e.getPlayer());
+			}
 
-        };
-    }
+		};
+	}
 }

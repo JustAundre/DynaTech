@@ -13,25 +13,25 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class WirelessEnergyBank extends SlimefunItem implements EnergyNetComponent {
 
-    private final int capacity;
+	private final int capacity;
 
-    @ParametersAreNonnullByDefault
-    public WirelessEnergyBank(ItemGroup itemGroup, int capacity, SlimefunItemStack item, RecipeType recipeType,
-            ItemStack[] recipe) {
-        super(itemGroup, item, recipeType, recipe);
+	@ParametersAreNonnullByDefault
+	public WirelessEnergyBank(ItemGroup itemGroup, int capacity, SlimefunItemStack item, RecipeType recipeType,
+			ItemStack[] recipe) {
+		super(itemGroup, item, recipeType, recipe);
 
-        this.capacity = capacity;
-    }
+		this.capacity = capacity;
+	}
 
-    @Override
-    @Nonnull
-    public EnergyNetComponentType getEnergyComponentType() {
-        return EnergyNetComponentType.CAPACITOR;
-    }
+	@Override
+	@Nonnull
+	public EnergyNetComponentType getEnergyComponentType() {
+		return EnergyNetComponentType.CAPACITOR;
+	}
 
-    @Override
-    public int getCapacity() {
-        return capacity;
-    }
+	@Override
+	public int getCapacity() {
+		return capacity;
+	}
 
 }

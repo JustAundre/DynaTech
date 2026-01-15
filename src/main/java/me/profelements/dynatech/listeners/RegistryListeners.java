@@ -13,31 +13,31 @@ import me.profelements.dynatech.utils.ItemWrapper;
 
 public class RegistryListeners implements Listener {
 
-    public RegistryListeners(DynaTech plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
+	public RegistryListeners(DynaTech plugin) {
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
 
-    @EventHandler
-    public <T> void confirmFreeze(RegistryFreezeEvent<T> event) {
+	@EventHandler
+	public <T> void confirmFreeze(RegistryFreezeEvent<T> event) {
 
-        if (event.getRegistryKey().equals(Registries.Keys.ITEMS)) {
-            // GRAB STAINLESS STEEL
-            Registry<ItemWrapper> items = (Registry<ItemWrapper>) Registry.getByKey(event.getRegistryKey());
-            if (items.getKeys().contains(Items.Keys.STAINLESS_STEEL_INGOT)) {
-                ItemWrapper wrapped = items.entry(Items.Keys.STAINLESS_STEEL_INGOT);
+		if (event.getRegistryKey().equals(Registries.Keys.ITEMS)) {
+			// GRAB STAINLESS STEEL
+			Registry<ItemWrapper> items = (Registry<ItemWrapper>) Registry.getByKey(event.getRegistryKey());
+			if (items.getKeys().contains(Items.Keys.STAINLESS_STEEL_INGOT)) {
+				ItemWrapper wrapped = items.entry(Items.Keys.STAINLESS_STEEL_INGOT);
 
-                SlimefunItemStack itemStackToUse = wrapped.stack();
+				SlimefunItemStack itemStackToUse = wrapped.stack();
 
-            }
+			}
 
-            if (items.getKeys().contains(Items.Keys.VEX_GEM)) {
-                ItemWrapper wrapped = items.entry(Items.Keys.VEX_GEM);
+			if (items.getKeys().contains(Items.Keys.VEX_GEM)) {
+				ItemWrapper wrapped = items.entry(Items.Keys.VEX_GEM);
 
-                SlimefunItemStack itemStackToUse = wrapped.stack();
+				SlimefunItemStack itemStackToUse = wrapped.stack();
 
-            }
-        }
+			}
+		}
 
-        DynaTech.getInstance().getLogger().info(event.getRegistryKey().key().toString() + " is getting frozen");
-    }
+		DynaTech.getInstance().getLogger().info(event.getRegistryKey().key().toString() + " is getting frozen");
+	}
 }

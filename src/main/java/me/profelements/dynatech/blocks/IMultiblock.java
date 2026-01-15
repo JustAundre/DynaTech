@@ -10,14 +10,14 @@ import com.google.common.base.Predicate;
 
 public interface IMultiblock {
 
-    Predicate<Block>[][][] getMultiblockBlocks();
+	Predicate<Block>[][][] getMultiblockBlocks();
 
-    boolean isController(World w, int x, int y, int z);
+	boolean isController(World w, int x, int y, int z);
 
-    boolean isValidMultiblock(Location l, BlockFace facing);
+	boolean isValidMultiblock(Location l, BlockFace facing);
 
-    void createMultiblock(Location l, BlockFace facing);
+	void createMultiblock(Location l, BlockFace facing);
 
-    void destroyMultiblock(Location l, BlockFace facing);
+	void destroyMultiblock(Location l, BlockFace facing);
 
 }
