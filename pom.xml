@@ -10,7 +10,7 @@
 	<name>DynaTech</name>
 
 	<properties>
-	  <maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.organization>profelements</sonar.organization>
@@ -19,7 +19,7 @@
 
 	<repositories>
 		<repository>
-			<id>paper-repo</id>
+			<id>papermc</id>
 			<url>https://repo.papermc.io/repository/maven-public/</url>
 		</repository>
 
@@ -37,10 +37,15 @@
 			<id>CodeMC</id>
 			<url>https://repo.codemc.org/repository/maven-public</url>
 		</repository>
+
+        <repository>
+            <id>slimefun-repo</id>
+            <url>https://blob.build/repository/maven-public/</url>
+        </repository>
 	</repositories>
 
 	<build>
-	<finalName>${project.name}</finalName>
+		<finalName>${project.name}</finalName>
 		<defaultGoal>clean package</defaultGoal>
 		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
 
@@ -86,7 +91,8 @@
 							<goal>shade</goal>
 						</goals>
 					</execution>
-				</executions> </plugin>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -103,18 +109,18 @@
 			<version>1.0.8</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.github.Slimefun</groupId>
-			<artifactId>Slimefun4</artifactId>
-			<version>experimental-SNAPSHOT</version>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>io.github.thebusybiscuit</groupId>
-					<artifactId>cscorelib2</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>com.github.Slimefun</groupId>
+            <artifactId>Slimefun4</artifactId>
+            <version>RC-37</version> 
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.github.thebusybiscuit</groupId>
+                    <artifactId>cscorelib2</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 		<dependency>
 			<groupId>com.github.thebusybiscuit</groupId>
 			<artifactId>exoticgarden</artifactId>
@@ -124,7 +130,7 @@
 		<dependency>
 			<groupId>io.github.mooy1</groupId>
 			<artifactId>InfinityExpansion</artifactId>
-			<version>vMODIFIED</version>
+			<version>d995144</version>
 			<scope>provided</scope>
 		</dependency>
 		
@@ -144,7 +150,7 @@
 		<dependency>
 			<groupId>org.bstats</groupId>
 			<artifactId>bstats-bukkit</artifactId>
-			<version>3.1.0</version>
+			<version>1.8</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -159,6 +165,5 @@
 			<version>f8ff251</version>
 			<scope>compile</scope>
 		</dependency>
-
 	</dependencies>
 </project>

@@ -105,11 +105,11 @@ public class UpgradesListener implements Listener {
 		String upgrades = BlockStorage.getLocationInfo(l, "upgrades");
 
 		if (upgrades != null && upgrades.contains("auto_output")) {
-			l.getWorld().dropItemNaturally(l, Items.AUTO_OUTPUT_UPGRADE.stack().item());
+			l.getWorld().dropItemNaturally(l, Items.AUTO_OUTPUT_UPGRADE.stack());
 		}
 
 		if (upgrades != null && upgrades.contains("auto_input")) {
-			l.getWorld().dropItemNaturally(l, Items.AUTO_INPUT_UPGRADE.stack().item());
+			l.getWorld().dropItemNaturally(l, Items.AUTO_INPUT_UPGRADE.stack());
 		}
 	}
 

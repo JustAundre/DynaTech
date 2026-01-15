@@ -36,8 +36,8 @@ public class GastronomiconIntegrationListener implements Listener {
 			for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
 				if (new SlimefunItemStack(item.getId(), item.getItem()) instanceof FoodItemStack food && !food.getTexture().equals(HeadTextures.NONE)
 						&& !item.getId().contains("GN_PERFECT")) {
-					cg.registerFuel(food.item(), food.getHunger() * 4);
-					PicnicBasket.registerFood(food.item(), new Pair<>(food.getHunger(), (float) food.getSaturation()));
+					cg.registerFuel(food, food.getHunger() * 4);
+					PicnicBasket.registerFood(food, new Pair<>(food.getHunger(), (float) food.getSaturation()));
 				}
 
 				if (item.getRecipeType() == GastroRecipeType.HARVEST) {

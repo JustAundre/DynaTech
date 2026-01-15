@@ -36,19 +36,19 @@ public class RecipeTypes {
 			new CustomItemStack(Material.LIME_CONCRETE, "Throw into the Tree Growth Chamber machine"));
 
 	public static final RecipeType MATERIAL_HIVE = new RecipeType(Keys.MATERIAL_HIVE.key(),
-			Items.MATERIAL_HIVE.stack().item(),
+			Items.MATERIAL_HIVE.stack(),
 			(recipe, output) -> {
 				MaterialHive materialHive = ((MaterialHive) Items.MATERIAL_HIVE.stack().getItem());
 				materialHive.getMachineRecipes().add(new MachineRecipe(1800, recipe, new ItemStack[] { output }));
 			});
 
 	public static final RecipeType PETAL_APOTHECARY = new RecipeType(Keys.PETAL_APOTHECARY.key(),
-			Items.PETAL_APOTHECARY.stack().item(),
+			Items.PETAL_APOTHECARY.stack(),
 			(recipe, output) -> {
 
 			});
 
-	public static final RecipeType ORECHID = new RecipeType(Keys.ORECHID.key(), Items.ORECHID.stack().item(),
+	public static final RecipeType ORECHID = new RecipeType(Keys.ORECHID.key(), Items.ORECHID.stack(),
 			(recipe, output) -> {
 				// Grab first item for input
 				Material inputMaterial = recipe[0].getType();
